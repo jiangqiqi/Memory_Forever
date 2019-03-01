@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Memory_Forever</string>
+    <string name="login_weixin">微信登录</string>
+    <string name="memory_forever">记忆永恒</string>
+</resources>
