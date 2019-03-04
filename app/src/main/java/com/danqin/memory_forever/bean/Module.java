@@ -1,6 +1,8 @@
 package com.danqin.memory_forever.bean;
 
-public class Module {
+import java.io.Serializable;
+
+public class Module implements Serializable {
 
     private int id;
 

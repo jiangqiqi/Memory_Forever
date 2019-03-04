@@ -9,4 +9,5 @@
     <string name="module_name">模块名称：</string>
     <string name="cancel">取消</string>
     <string name="confirm">确定</string>
+    <string name="invitate_student_greet">邀请同学赠言</string>
 </resources>

@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -110,6 +111,14 @@ public class MainActivity extends Activity implements AddModuleDialog.OnConfirmL
             binding.moduleImg.setImageResource(module.getImageRes());
             binding.moduleName.setText(module.getName());
             binding.moduleDelete.setVisibility(isEditting ? View.VISIBLE : View.GONE);
+            binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(MainActivity.this,GreetsActivity.class);
+                    intent.putExtra(GreetsActivity.KEY_MODULE,module);
+                    startActivity(intent);
+                }
+            });
             binding.moduleDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
