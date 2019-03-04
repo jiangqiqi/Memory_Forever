@@ -10,6 +10,16 @@ public class Module {
 
     private int imageRes;
 
+    private int type;
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
+
     public int getImageRes() {
         return imageRes;
     }

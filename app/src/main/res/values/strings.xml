@@ -2,4 +2,11 @@
     <string name="app_name">Memory_Forever</string>
     <string name="login_weixin">微信登录</string>
     <string name="memory_forever">记忆永恒</string>
+    <string name="create_module">创建模块</string>
+    <string name="type_selector">类型选择：</string>
+    <string name="zengyan">赠言</string>
+    <string name="record">记录</string>
+    <string name="module_name">模块名称：</string>
+    <string name="cancel">取消</string>
+    <string name="confirm">确定</string>
 </resources>

@@ -17,12 +17,14 @@ import android.view.ViewGroup;
 import com.danqin.memory_forever.R;
 import com.danqin.memory_forever.bean.Module;
 import com.danqin.memory_forever.databinding.ActivityMainBinding;
+import com.danqin.memory_forever.databinding.AddModuleDialogBinding;
 import com.danqin.memory_forever.databinding.ModuleItemBinding;
+import com.danqin.memory_forever.view.AddModuleDialog;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity {
+public class MainActivity extends Activity implements AddModuleDialog.OnConfirmListener {
     private ActivityMainBinding binding;
     private List<Module> modules;
     private boolean isEditting;
@@ -56,12 +58,23 @@ public class MainActivity extends Activity {
         adapter.notifyDataSetChanged();
     }
 
+    private AddModuleDialog dialog;
     public void addModule(View view) {
-        Log.e(getClass().getName(), "jiangliang");
+        if (dialog == null) {
+            dialog = new AddModuleDialog(this);
+            dialog.setOnConfirmListener(this);
+        }
+        dialog.show();
     }
 
     public void edit(View view) {
         isEditting = !isEditting;
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    public void confirm(Module module) {
+        modules.add(module);
         adapter.notifyDataSetChanged();
     }
 

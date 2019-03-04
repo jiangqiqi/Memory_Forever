@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/dialog_layout_bg">
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="280dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:background="@drawable/module_dialog_bg">
+
+            <TextView
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/create_module"
+                android:textSize="25sp"
+                android:layout_marginTop="20dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/type_select"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/type_selector"
+                android:textSize="20sp"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/radio_group"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title" />
+
+            <RadioGroup
+                android:id="@+id/radio_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginRight="10dp"
+                app:layout_constraintLeft_toRightOf="@+id/type_select"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/title">
+
+                <RadioButton
+                    android:id="@+id/gift_rb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@android:color/black"
+                    android:checked="true"
+                    android:text="@string/zengyan" />
+
+                <RadioButton
+                    android:id="@+id/record_rb"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:textColor="@android:color/black"
+                    android:text="@string/record" />
+            </RadioGroup>
+
+            <TextView
+                android:id="@+id/module_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+                android:text="@string/module_name"
+                android:textSize="20sp"
+                app:layout_constraintLeft_toLeftOf="@+id/type_select"
+                app:layout_constraintTop_toBottomOf="@+id/type_select" />
+
+            <EditText
+                android:id="@+id/edit_module_name"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginRight="10dp"
+                app:layout_constraintBottom_toBottomOf="@+id/module_name"
+                app:layout_constraintLeft_toRightOf="@+id/module_name"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/module_name" />
+
+            <View
+                android:id="@+id/horizontal_line"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/dialog_line_color"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/module_name" />
+
+            <View
+                android:id="@+id/vertical_line"
+                android:layout_width="1dp"
+                android:layout_height="50dp"
+                android:background="@color/dialog_line_color"
+                app:layout_constraintLeft_toLeftOf="@+id/module_name"
+                app:layout_constraintRight_toRightOf="@+id/radio_group"
+                app:layout_constraintTop_toBottomOf="@+id/horizontal_line" />
+
+            <TextView
+                android:id="@+id/cancel"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:text="@string/cancel"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/vertical_line"
+                app:layout_constraintLeft_toLeftOf="@+id/module_name"
+                app:layout_constraintRight_toRightOf="@+id/vertical_line"
+                app:layout_constraintTop_toBottomOf="@+id/horizontal_line" />
+
+            <TextView
+                android:id="@+id/confirm"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:gravity="center"
+                android:text="@string/confirm"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@+id/vertical_line"
+                app:layout_constraintLeft_toRightOf="@+id/vertical_line"
+                app:layout_constraintRight_toRightOf="@id/radio_group"
+                app:layout_constraintTop_toTopOf="@+id/vertical_line" />
+        </android.support.constraint.ConstraintLayout>
+    </FrameLayout>
+</layout>
