@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout>
+
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:id="@+id/record_1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/greet_record_1"
+                android:layout_width="360dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/record_duration_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/record_2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/greet_record_2"
+                android:layout_width="360dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/record_duration_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/record_3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="20dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/greet_record_3"
+                android:layout_width="360dp"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/record_duration_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="5dp" />
+        </LinearLayout>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraint_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp">
+
+            <FrameLayout
+                android:id="@+id/greet_video_layout_1"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginRight="20dp"
+                app:layout_constraintBottom_toBottomOf="@+id/constraint_layout"
+                app:layout_constraintLeft_toLeftOf="@+id/constraint_layout"
+                app:layout_constraintRight_toLeftOf="@+id/greet_video_layout_2"
+                app:layout_constraintTop_toTopOf="@+id/constraint_layout">
+
+                <ImageView
+                    android:id="@+id/greet_video_1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@android:drawable/presence_video_online" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/greet_video_layout_2"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginRight="20dp"
+                app:layout_constraintBottom_toBottomOf="@+id/constraint_layout"
+                app:layout_constraintLeft_toRightOf="@+id/greet_video_layout_1"
+                app:layout_constraintRight_toLeftOf="@+id/greet_video_layout_3"
+                app:layout_constraintTop_toTopOf="@+id/constraint_layout">
+
+                <ImageView
+                    android:id="@+id/greet_video_2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@android:drawable/presence_video_online" />
+            </FrameLayout>
+
+            <FrameLayout
+                android:id="@+id/greet_video_layout_3"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintBottom_toBottomOf="@+id/constraint_layout"
+                app:layout_constraintLeft_toRightOf="@+id/greet_video_layout_2"
+                app:layout_constraintRight_toRightOf="@+id/constraint_layout"
+                app:layout_constraintTop_toTopOf="@+id/constraint_layout"
+
+                >
+
+                <ImageView
+                    android:id="@+id/greet_video_3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:src="@android:drawable/presence_video_online" />
+            </FrameLayout>
+        </android.support.constraint.ConstraintLayout>
+
+        <TextView
+            android:id="@+id/classmate_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingLeft="210dp"
+            android:text="蒋沁钊"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/greet_time"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:paddingLeft="160dp"
+            android:text="2019.03.05 09:56"
+            android:textSize="20sp" />
+    </LinearLayout>
+</layout>
