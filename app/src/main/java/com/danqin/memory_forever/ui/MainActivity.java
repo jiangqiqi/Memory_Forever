@@ -2,7 +2,6 @@ package com.danqin.memory_forever.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -10,7 +9,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -18,7 +16,6 @@ import android.view.ViewGroup;
 import com.danqin.memory_forever.R;
 import com.danqin.memory_forever.bean.Module;
 import com.danqin.memory_forever.databinding.ActivityMainBinding;
-import com.danqin.memory_forever.databinding.AddModuleDialogBinding;
 import com.danqin.memory_forever.databinding.ModuleItemBinding;
 import com.danqin.memory_forever.view.AddModuleDialog;
 
@@ -114,7 +111,7 @@ public class MainActivity extends Activity implements AddModuleDialog.OnConfirmL
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(MainActivity.this,GreetsActivity.class);
+                    Intent intent = new Intent(MainActivity.this, GreetsActivity.class);
                     intent.putExtra(GreetsActivity.KEY_MODULE,module);
                     startActivity(intent);
                 }

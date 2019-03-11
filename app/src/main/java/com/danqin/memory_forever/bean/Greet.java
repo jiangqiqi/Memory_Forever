@@ -8,9 +8,9 @@ public class Greet {
     private String classmateName;
     private String time;
 
-    private List<Record> records = new ArrayList<>();
+    private Record record;
 
-    private List<String> videoPaths = new ArrayList<>();
+    private String videoPath;
 
     public String getClassmateName() {
         return classmateName;
@@ -28,20 +28,20 @@ public class Greet {
         this.time = time;
     }
 
-    public List<Record> getRecords() {
-        return records;
+    public Record getRecord() {
+        return record;
     }
 
-    public void setRecords(List<Record> records) {
-        this.records = records;
+    public void setRecord(Record record) {
+        this.record = record;
     }
 
-    public List<String> getVideoPaths() {
-        return videoPaths;
+    public String getVideoPath() {
+        return videoPath;
     }
 
-    public void setVideoPaths(List<String> videoPaths) {
-        this.videoPaths = videoPaths;
+    public void setVideoPath(String videoPath) {
+        this.videoPath = videoPath;
     }
 
     public static class Record{
