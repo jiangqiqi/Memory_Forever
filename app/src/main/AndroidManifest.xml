@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:name=".MemoryApplication"
         android:theme="@style/Theme.Design.Light.NoActionBar">
-        <activity android:name=".ui.SplashActivity">
+        <activity android:name=".MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
