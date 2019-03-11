@@ -121,7 +121,10 @@ public class GreetsActivity extends Activity {
     public void invitate(View view) {
         //TODO:通过微信分享到微信群
     }
-    
+
+    /**
+     * 隐藏视频播放界面，退出视频播放。
+     */
     public void hideSurfaceView(View view){
         binding.videoSurfaceview.setVisibility(View.GONE);
         invitateBtn.setVisibility(View.VISIBLE);
@@ -130,6 +133,7 @@ public class GreetsActivity extends Activity {
         }
         player.setDisplay(null);
     }
+
     private void play(String dataSource){
         try {
             player.reset();
@@ -231,7 +235,7 @@ public class GreetsActivity extends Activity {
 
             if (greet.getVideoPath() != null) {
                 binding.greetVideo.setVisibility(View.VISIBLE);
-                //TODO:设置视频第一帧图像，点击全屏播放
+                //设置视频第一帧图像，点击全屏播放
                 Glide.with(GreetsActivity.this)
                         .load(greet.getVideoPath())
                         .into(binding.videoFirstFrame);
