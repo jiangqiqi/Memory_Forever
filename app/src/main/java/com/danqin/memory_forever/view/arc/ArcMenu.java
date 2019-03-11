@@ -33,6 +33,8 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.danqin.memory_forever.R;
+
 /**
  * A custom view that looks like the menu in <a href="https://path.com">Path
  * 2.0</a> (for iOS).

@@ -16,6 +16,8 @@ import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 
+import com.danqin.memory_forever.R;
+
 public class RayMenu extends RelativeLayout {
 	private RayLayout mRayLayout;
 

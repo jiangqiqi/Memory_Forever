@@ -15,6 +15,8 @@ import android.view.animation.OvershootInterpolator;
 import android.view.animation.RotateAnimation;
 import android.view.animation.Animation.AnimationListener;
 
+import com.danqin.memory_forever.R;
+
 public class RayLayout extends ViewGroup {
 
 	/**
