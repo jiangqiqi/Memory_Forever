@@ -3,15 +3,18 @@ package com.danqin.memory_forever.ui;
 import android.app.Activity;
 import android.databinding.DataBindingUtil;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.bumptech.glide.Glide;
 import com.danqin.memory_forever.R;
 import com.danqin.memory_forever.bean.Greet;
 import com.danqin.memory_forever.bean.Module;
@@ -46,7 +49,7 @@ public class GreetsActivity extends Activity {
 
     private List<String> paths = new ArrayList<>();
 
-    public List<String> refreshFileList(String strPath) {
+    public List<String> refreshFileList(String strPath, String end) {
         String filename;//文件名
         File dir = new File(strPath);//文件夹dir
         File[] files = dir.listFiles();//文件夹下的所有文件或文件夹
@@ -56,10 +59,10 @@ public class GreetsActivity extends Activity {
 
         for (int i = 0; i < files.length; i++) {
             if (files[i].isDirectory()) {
-                refreshFileList(files[i].getAbsolutePath());//递归文件夹！！！
+                refreshFileList(files[i].getAbsolutePath(), end);//递归文件夹！！！
             } else {
                 filename = files[i].getName();
-                if (filename.endsWith("aac"))//判断是不是msml后缀的文件
+                if (filename.endsWith(end))//判断是不是msml后缀的文件
                 {
                     paths.add(files[i].getAbsolutePath());//对于文件才把它的路径加到filelist中
                 }
@@ -70,12 +73,12 @@ public class GreetsActivity extends Activity {
 
     private void loadData() {
 
-        List<String> paths = refreshFileList(Environment.getExternalStorageDirectory() + "/Record");
+        List<String> paths = refreshFileList(Environment.getExternalStorageDirectory() + "/Record", "aac");
 
         for (String path : paths) {
             Greet greet = new Greet();
             greet.setClassmateName("蒋沁钊");
-            greet.setTime("2019.03.05 09:56");
+            greet.setTime("2019-3-5 09:56");
             Greet.Record record = new Greet.Record();
             try {
                 MediaPlayer player = new MediaPlayer();
@@ -89,6 +92,16 @@ public class GreetsActivity extends Activity {
             greet.setRecord(record);
             greets.add(greet);
         }
+        paths.clear();
+        List<String> videos = refreshFileList(Environment.getExternalStorageDirectory() + "/Tencent/MicroMsg/WeiXin", "mp4");
+        for (int i = 0; i < 10; i++) {
+            Greet greet = new Greet();
+            greet.setClassmateName("蒋沁钊");
+            greet.setTime("2019.-3-11 09:56");
+            greet.setVideoPath(videos.get(i));
+            greets.add(greet);
+        }
+
         adapter.notifyDataSetChanged();
     }
 
@@ -104,8 +117,7 @@ public class GreetsActivity extends Activity {
         @NonNull
         @Override
         public GreetHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-//            return new GreetHolder((GreetItem1Binding) DataBindingUtil.inflate(LayoutInflater.from(getApplicationContext()), R.layout.greet_item, null, false));
-            return null;
+            return new GreetHolder((GreetItemBinding) DataBindingUtil.inflate(LayoutInflater.from(getApplicationContext()), R.layout.greet_item, null, false));
         }
 
         @Override
@@ -165,6 +177,11 @@ public class GreetsActivity extends Activity {
             if (greet.getVideoPath() != null) {
                 binding.greetVideo.setVisibility(View.VISIBLE);
                 //TODO:设置视频第一帧图像，点击全屏播放
+                Log.e("JiangLiang", "video path is ：" + greet.getVideoPath());
+                Glide.with(GreetsActivity.this)
+                        .load(greet.getVideoPath())
+                        .into(binding.videoFirstFrame);
+
             } else {
                 binding.greetVideo.setVisibility(View.GONE);
             }

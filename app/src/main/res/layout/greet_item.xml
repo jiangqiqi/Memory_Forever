@@ -22,6 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             android:text="2019-10-31 13:54"
             app:layout_constraintLeft_toRightOf="@+id/classmate_name"
             app:layout_constraintTop_toTopOf="parent" />
@@ -63,9 +64,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
+            android:layout_marginTop="5dp"
             app:layout_constraintLeft_toRightOf="@+id/classmate_name"
             app:layout_constraintTop_toBottomOf="@+id/greet_time"
-            app:layout_constraintTop_toTopOf="@+id/greet_voice">
+            >
 
             <ImageView
                 android:id="@+id/video_first_frame"
