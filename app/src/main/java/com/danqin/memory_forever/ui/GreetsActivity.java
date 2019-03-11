@@ -11,8 +11,11 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.SurfaceHolder;
+import android.view.SurfaceView;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.danqin.memory_forever.R;
@@ -31,9 +34,12 @@ public class GreetsActivity extends Activity {
     private Module module;
     public static final String KEY_MODULE = "module";
     private List<Greet> greets = new ArrayList<>();
+    private String videoPath;
     private GreetAdapter adapter;
     private String tag;
     private MediaPlayer player = new MediaPlayer();
+    private SurfaceView videoSurfaceview;
+    private TextView invitateBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,6 +50,9 @@ public class GreetsActivity extends Activity {
         binding.moduleName.setText(module.getName());
         binding.greetsRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         binding.greetsRecycler.setAdapter(adapter = new GreetAdapter());
+        videoSurfaceview = binding.videoSurfaceview;
+        invitateBtn = binding.invitateBtn;
+        videoSurfaceview.getHolder().addCallback(callback);
         loadData();
     }
 
@@ -112,6 +121,59 @@ public class GreetsActivity extends Activity {
     public void invitate(View view) {
         //TODO:通过微信分享到微信群
     }
+    
+    public void hideSurfaceView(View view){
+        binding.videoSurfaceview.setVisibility(View.GONE);
+        invitateBtn.setVisibility(View.VISIBLE);
+        if (player.isPlaying()){
+            player.stop();
+        }
+        player.setDisplay(null);
+    }
+    private void play(String dataSource){
+        try {
+            player.reset();
+            player.setDataSource(dataSource);
+            player.prepareAsync();
+            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                @Override
+                public void onPrepared(MediaPlayer mp) {
+                    player.start();
+                }
+            });
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (player.isPlaying()){
+            player.stop();
+        }
+        player.release();
+        callback = null;
+        player = null;
+    }
+
+    private SurfaceHolder.Callback callback = new SurfaceHolder.Callback() {
+        @Override
+        public void surfaceCreated(SurfaceHolder holder) {
+        }
+
+        @Override
+        public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
+
+        }
+
+        @Override
+        public void surfaceDestroyed(SurfaceHolder holder) {
+            if (player != null && player.isPlaying()) {
+                player.stop();
+            }
+        }
+    };
 
     private class GreetAdapter extends RecyclerView.Adapter<GreetHolder> {
         @NonNull
@@ -139,7 +201,7 @@ public class GreetsActivity extends Activity {
             this.binding = binding;
         }
 
-        public void setData(Greet greet) {
+        public void setData(final Greet greet) {
             binding.classmateName.setText(greet.getClassmateName());
             if (greet.getRecord() != null) {
                 binding.greetVoice.setVisibility(View.VISIBLE);
@@ -158,14 +220,7 @@ public class GreetsActivity extends Activity {
                             if (player.isPlaying()) {
                                 player.pause();
                             }
-                            try {
-                                player.reset();
-                                player.setDataSource(record.getRecordPath());
-                                player.prepare();
-                                player.start();
-                            } catch (IOException e) {
-                                e.printStackTrace();
-                            }
+                            play(record.getRecordPath());
                         }
                         tag = record.getRecordPath();
                     }
@@ -177,11 +232,31 @@ public class GreetsActivity extends Activity {
             if (greet.getVideoPath() != null) {
                 binding.greetVideo.setVisibility(View.VISIBLE);
                 //TODO:设置视频第一帧图像，点击全屏播放
-                Log.e("JiangLiang", "video path is ：" + greet.getVideoPath());
                 Glide.with(GreetsActivity.this)
                         .load(greet.getVideoPath())
                         .into(binding.videoFirstFrame);
-
+                binding.greetVideo.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        invitateBtn.setVisibility(View.GONE);
+                        videoSurfaceview.setVisibility(View.VISIBLE);
+                        tag = greet.getVideoPath();
+                        try {
+                            player.reset();
+                            player.setDataSource(greet.getVideoPath());
+                            player.prepareAsync();
+                            player.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                                @Override
+                                public void onPrepared(MediaPlayer mp) {
+                                    player.setDisplay(videoSurfaceview.getHolder());
+                                    player.start();
+                                }
+                            });
+                        }catch (IOException e){
+                            e.printStackTrace();
+                        }
+                    }
+                });
             } else {
                 binding.greetVideo.setVisibility(View.GONE);
             }
