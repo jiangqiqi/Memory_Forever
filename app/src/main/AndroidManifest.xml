@@ -28,6 +28,7 @@
         </activity>
         <activity android:name=".ui.GreetsActivity" />
         <activity android:name=".ui.RecordsActivity" />
+        <activity android:name=".ui.EditActivity" />
     </application>
 
 </manifest>

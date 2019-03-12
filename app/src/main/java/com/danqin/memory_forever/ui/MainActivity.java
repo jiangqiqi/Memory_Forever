@@ -44,6 +44,7 @@ public class MainActivity extends Activity implements AddModuleDialog.OnConfirmL
         Module module1 = new Module();
         module1.setImageRes(R.drawable.india_chennai_highway);
         module1.setName("大学赠言");
+        module1.setType(1);
         Module module2 = new Module();
         module2.setImageRes(R.drawable.india_chettinad_produce);
         module2.setName("高中赠言");
