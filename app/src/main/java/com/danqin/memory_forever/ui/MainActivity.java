@@ -27,7 +27,7 @@ public class MainActivity extends Activity implements AddModuleDialog.OnConfirmL
     private List<Module> modules;
     private boolean isEditting;
     private ModuleAdapter adapter;
-
+    public static final String KEY_MODULE = "module";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -111,8 +111,8 @@ public class MainActivity extends Activity implements AddModuleDialog.OnConfirmL
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(MainActivity.this, GreetsActivity.class);
-                    intent.putExtra(GreetsActivity.KEY_MODULE,module);
+                    Intent intent = new Intent(MainActivity.this, RecordsActivity.class);
+                    intent.putExtra(KEY_MODULE,module);
                     startActivity(intent);
                 }
             });

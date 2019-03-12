@@ -29,10 +29,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GreetsActivity extends Activity {
+public class GreetsActivity extends BaseActivity {
     private ActivityGreetsBinding binding;
     private Module module;
-    public static final String KEY_MODULE = "module";
     private List<Greet> greets = new ArrayList<>();
     private String videoPath;
     private GreetAdapter adapter;
@@ -42,18 +41,19 @@ public class GreetsActivity extends Activity {
     private TextView invitateBtn;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void setContentView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_greets);
-        module = (Module) getIntent().getSerializableExtra(KEY_MODULE);
+    }
 
-        binding.moduleName.setText(module.getName());
+    @Override
+    protected void initView() {
+        module = (Module) getIntent().getSerializableExtra(MainActivity.KEY_MODULE);
+        binding.topLayout.moduleName.setText(module.getName());
         binding.greetsRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         binding.greetsRecycler.setAdapter(adapter = new GreetAdapter());
         videoSurfaceview = binding.videoSurfaceview;
         invitateBtn = binding.invitateBtn;
         videoSurfaceview.getHolder().addCallback(callback);
-        loadData();
     }
 
     private List<String> paths = new ArrayList<>();
@@ -79,9 +79,8 @@ public class GreetsActivity extends Activity {
         }
         return paths;
     }
-
-    private void loadData() {
-
+    @Override
+    protected void loadData() {
         List<String> paths = refreshFileList(Environment.getExternalStorageDirectory() + "/Record", "aac");
 
         for (String path : paths) {
@@ -112,10 +111,6 @@ public class GreetsActivity extends Activity {
         }
 
         adapter.notifyDataSetChanged();
-    }
-
-    public void back(View view) {
-        finish();
     }
 
     public void invitate(View view) {

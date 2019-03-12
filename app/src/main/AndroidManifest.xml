@@ -27,6 +27,7 @@
             </intent-filter>
         </activity>
         <activity android:name=".ui.GreetsActivity" />
+        <activity android:name=".ui.RecordsActivity" />
     </application>
 
 </manifest>
