@@ -33,11 +33,20 @@ public class EditActivity extends BaseActivity {
 
         if (requestCode == RecordsActivity.REQUEST_CODE_IMAGE_CAPTURE){
             binding.videoLayout.setVisibility(View.GONE);
+//            Glide.with(this)
+//                    .load(file)
+//                    .override(300,600)
+//                    .fitCenter()
+//                    .into(binding.imgAdd);
+        }
+
+        if (requestCode == RecordsActivity.REQUEST_CODE_VIDEO_CAPTURE){
+            binding.videoLayout.setVisibility(View.VISIBLE);
             Glide.with(this)
                     .load(file)
                     .override(300,600)
                     .fitCenter()
-                    .into(binding.imgAdd);
+                    .into(binding.imgVideo);
         }
 
     }
