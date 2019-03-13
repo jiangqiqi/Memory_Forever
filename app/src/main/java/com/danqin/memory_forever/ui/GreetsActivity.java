@@ -192,6 +192,18 @@ public class GreetsActivity extends BaseActivity {
         }
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (player != null && player.isPlaying()) {
+            player.stop();
+        }
+        if (videoSurfaceview.getVisibility() == View.VISIBLE){
+            player.setDisplay(null);
+            videoSurfaceview.setVisibility(View.GONE);
+        }
+    }
+
     private class GreetHolder extends RecyclerView.ViewHolder {
         GreetItemBinding binding;
 
@@ -248,6 +260,12 @@ public class GreetsActivity extends BaseActivity {
                                 @Override
                                 public void onPrepared(MediaPlayer mp) {
                                     player.setDisplay(videoSurfaceview.getHolder());
+                                    player.start();
+                                }
+                            });
+                            player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                @Override
+                                public void onCompletion(MediaPlayer mp) {
                                     player.start();
                                 }
                             });
