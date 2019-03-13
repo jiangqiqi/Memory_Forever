@@ -46,6 +46,16 @@
             android:gravity="top"
             android:background="@null"
             />
+        <ImageView
+            android:id="@+id/img_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toBottomOf="@+id/edit_content"
+            app:layout_constraintLeft_toLeftOf="@+id/edit_content"
+            android:src="@drawable/img_add"
+            android:onClick="addVideo"
+            android:visibility="gone"
+            />
         <FrameLayout
             android:id="@+id/video_layout"
             android:layout_width="wrap_content"

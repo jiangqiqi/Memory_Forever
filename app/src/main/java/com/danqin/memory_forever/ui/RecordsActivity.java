@@ -1,6 +1,7 @@
 package com.danqin.memory_forever.ui;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
 import android.graphics.Bitmap;
@@ -17,8 +18,17 @@ import android.widget.ImageView;
 import com.danqin.memory_forever.R;
 import com.danqin.memory_forever.bean.Module;
 import com.danqin.memory_forever.databinding.RecordsLayoutBinding;
+import com.danqin.memory_forever.utils.Glide4Engine;
+import com.danqin.memory_forever.utils.MyGlideEngine;
+import com.zhihu.matisse.Matisse;
+import com.zhihu.matisse.MimeType;
+import com.zhihu.matisse.engine.impl.GlideEngine;
+import com.zhihu.matisse.engine.impl.PicassoEngine;
+import com.zhihu.matisse.filter.Filter;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 public class RecordsActivity extends BaseActivity {
     private RecordsLayoutBinding binding;
@@ -27,6 +37,8 @@ public class RecordsActivity extends BaseActivity {
 
     public static final int REQUEST_CODE_IMAGE_CAPTURE = 10000;
     public static final int REQUEST_CODE_VIDEO_CAPTURE = 10001;
+    public static final int REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM = 10002;
+    public static final int REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM = 10003;
     public static final String KEY_REQUEST_CODE = "requestCode";
     public static final String KEY_RESOURCE_FILE = "resourceFile";
 
@@ -79,8 +91,10 @@ public class RecordsActivity extends BaseActivity {
                             captureVideo();
                             break;
                         case 2:
+                            selectImgFromPhotoAlbum();
                             break;
                         case 3:
+//                            selectVideoFromPhotoAlbum();
                             break;
                         case 4:
                             break;
@@ -91,6 +105,36 @@ public class RecordsActivity extends BaseActivity {
             });
         }
     }
+
+
+//    private void selectVideoFromPhotoAlbum(){
+//        Matisse.from(this)
+//                .choose(MimeType.ofVideo())
+//                .theme(R.style.Matisse_Zhihu)
+//                .showSingleMediaType(true)
+//                .countable(false)
+//                .maxSelectable(1)
+//                .originalEnable(true)
+//                .maxOriginalSize(10)
+//                .imageEngine(new Glide4Engine())
+//                .forResult(REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM);
+//    }
+
+    //从相册中选取照片
+    private void selectImgFromPhotoAlbum(){
+        Matisse.from(this)
+                .choose(MimeType.ofImage())
+                .theme(R.style.Matisse_Zhihu)
+                .showSingleMediaType(true)
+                .countable(false)
+                .maxSelectable(9)
+                .originalEnable(true)
+                .maxOriginalSize(10)
+                .imageEngine(new Glide4Engine())
+                .forResult(REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM);
+
+    }
+
 
     private File file;
 
@@ -120,6 +164,9 @@ public class RecordsActivity extends BaseActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Intent intent = new Intent(this, EditActivity.class);
+        if (data == null){
+            return;
+        }
         switch (requestCode) {
             case REQUEST_CODE_IMAGE_CAPTURE:
                 intent.putExtra(KEY_REQUEST_CODE, REQUEST_CODE_IMAGE_CAPTURE);
@@ -136,8 +183,18 @@ public class RecordsActivity extends BaseActivity {
                     cursor.close();
                 }
                 break;
+            case REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM:
+                intent.putExtra(KEY_REQUEST_CODE,REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM);
+                ArrayList<Uri> selectedImgUris = (ArrayList<Uri>) Matisse.obtainResult(data);
+                Log.e(tag,"selected img uris is : " + selectedImgUris);
+                intent.putParcelableArrayListExtra(KEY_RESOURCE_FILE,selectedImgUris);
+                break;
+//            case REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM:
+//                ArrayList<Uri> selectedVideoUris = (ArrayList<Uri>) Matisse.obtainResult(data);
+//                Log.e(tag,"selected img uris is : " + selectedVideoUris);
+//                break;
         }
-        startActivity(intent);
+//        startActivity(intent);
 
     }
 }

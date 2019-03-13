@@ -1,5 +1,7 @@
 package com.danqin.memory_forever.ui;
 
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.graphics.BitmapFactory;
@@ -8,6 +10,7 @@ import android.view.SurfaceHolder;
 import android.view.View;
 
 import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.danqin.memory_forever.R;
 import com.danqin.memory_forever.databinding.EditLayoutBinding;
 
@@ -96,7 +99,6 @@ public class EditActivity extends BaseActivity {
             player.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
                 @Override
                 public void onCompletion(MediaPlayer mp) {
-//                    binding.playIv.setVisibility(View.VISIBLE);
                     player.start();
                 }
             });
@@ -109,6 +111,10 @@ public class EditActivity extends BaseActivity {
     @Override
     protected void onPause() {
         super.onPause();
+        hideFullScreen();
+    }
+
+    private void hideFullScreen(){
         if (player != null && player.isPlaying()) {
             player.stop();
         }
@@ -127,10 +133,33 @@ public class EditActivity extends BaseActivity {
     }
 
     public void hideFullScreen(View view) {
-        binding.fullScreenLayout.setVisibility(View.GONE);
-        if (player.isPlaying()) {
-            player.stop();
-        }
+        hideFullScreen();
     }
 
+    public void addVideo(View view){
+
+    }
+
+    public void delete(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("提示");
+        builder.setMessage("确定要删除这段视频吗？");
+        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                hideFullScreen();
+                file = null;
+                binding.videoLayout.setVisibility(View.GONE);
+                binding.imgAdd.setVisibility(View.VISIBLE);
+            }
+        });
+        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
 }
