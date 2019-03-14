@@ -40,7 +40,8 @@ public class RecordsActivity extends BaseActivity {
     public static final int REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM = 10002;
     public static final int REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM = 10003;
     public static final String KEY_REQUEST_CODE = "requestCode";
-    public static final String KEY_RESOURCE_FILE = "resourceFile";
+    public static final String KEY_RESOURCE_URI = "resourceUri";
+    public static final String KEY_RESOURCE_URIS = "resourceUris";
 
     @Override
     protected void setContentView() {
@@ -170,28 +171,22 @@ public class RecordsActivity extends BaseActivity {
         switch (requestCode) {
             case REQUEST_CODE_IMAGE_CAPTURE:
                 intent.putExtra(KEY_REQUEST_CODE, REQUEST_CODE_IMAGE_CAPTURE);
-                intent.putExtra(KEY_RESOURCE_FILE, file);
+                intent.putExtra(KEY_RESOURCE_URI, file);
                 break;
             case REQUEST_CODE_VIDEO_CAPTURE:
                 intent.putExtra(KEY_REQUEST_CODE, REQUEST_CODE_VIDEO_CAPTURE);
                 Uri uri = data.getData();
-                Cursor cursor = getContentResolver().query(uri,null,null,null,null);
-                if (cursor!=null&&cursor.moveToNext()){
-                    String filePath = cursor.getString(cursor.getColumnIndex(MediaStore.Video.VideoColumns.DATA));
-                    file = new File(filePath);
-                    intent.putExtra(KEY_RESOURCE_FILE, file);
-                    cursor.close();
-                }
+                intent.putExtra(KEY_RESOURCE_URI, uri);
                 break;
             case REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM:
                 intent.putExtra(KEY_REQUEST_CODE,REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM);
                 ArrayList<Uri> selectedImgUris = (ArrayList<Uri>) Matisse.obtainResult(data);
-                Log.e(tag,"selected img uris is : " + selectedImgUris);
-                intent.putParcelableArrayListExtra(KEY_RESOURCE_FILE,selectedImgUris);
+                intent.putParcelableArrayListExtra(KEY_RESOURCE_URIS,selectedImgUris);
                 break;
             case REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM:
                 ArrayList<Uri> selectedVideoUris = (ArrayList<Uri>) Matisse.obtainResult(data);
-                Log.e(tag,"selected img uris is : " + selectedVideoUris);
+                intent.putExtra(KEY_RESOURCE_URI, selectedVideoUris.get(0));
+                intent.putExtra(KEY_REQUEST_CODE,REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM);
                 break;
         }
         startActivity(intent);
