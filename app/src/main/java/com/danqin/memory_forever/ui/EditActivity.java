@@ -13,6 +13,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.View;
@@ -70,6 +71,21 @@ public class EditActivity extends BaseActivity implements ViewPager.OnPageChange
         pagerAdapter = new PreviewPagerAdapter(getSupportFragmentManager());
         binding.previewViewpager.setAdapter(pagerAdapter);
         binding.previewViewpager.addOnPageChangeListener(this);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK){
+            if (binding.fullScreenImageLayout.getVisibility() == View.VISIBLE){
+                binding.fullScreenImageLayout.setVisibility(View.GONE);
+                return false;
+            }
+            if (binding.fullScreenLayout.getVisibility() == View.VISIBLE){
+                binding.fullScreenLayout.setVisibility(View.GONE);
+                return false;
+            }
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override
