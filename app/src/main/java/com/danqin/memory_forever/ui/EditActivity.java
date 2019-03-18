@@ -1,16 +1,15 @@
 package com.danqin.memory_forever.ui;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
-import android.graphics.BitmapFactory;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,14 +24,14 @@ import com.danqin.memory_forever.R;
 import com.danqin.memory_forever.databinding.EditLayoutBinding;
 import com.danqin.memory_forever.databinding.ImgItemBinding;
 import com.danqin.memory_forever.utils.MDP_PX;
-import com.danqin.memory_forever.view.SimpleDividerDecoration;
 import com.danqin.memory_forever.view.SpacesItemDecoration;
+import com.danqin.memory_forever.view.preview.PreviewPagerAdapter;
+import com.zhihu.matisse.listener.OnFragmentInteractionListener;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class EditActivity extends BaseActivity {
+public class EditActivity extends BaseActivity implements ViewPager.OnPageChangeListener, OnFragmentInteractionListener {
 
     private EditLayoutBinding binding;
     private MediaPlayer player;
@@ -45,7 +44,7 @@ public class EditActivity extends BaseActivity {
     private int requestCode;
     private Uri uri;
     private ArrayList<Uri> uris;
-
+    private PreviewPagerAdapter pagerAdapter;
     @Override
     protected void initView() {
         super.initView();
@@ -68,6 +67,23 @@ public class EditActivity extends BaseActivity {
                 handleViewWithVideo();
                 break;
         }
+        pagerAdapter = new PreviewPagerAdapter(getSupportFragmentManager());
+        binding.previewViewpager.setAdapter(pagerAdapter);
+        binding.previewViewpager.addOnPageChangeListener(this);
+    }
+
+    @Override
+    public void onPageScrolled(int i, float v, int i1) {
+
+    }
+
+    @Override
+    public void onPageSelected(int i) {
+
+    }
+
+    @Override
+    public void onPageScrollStateChanged(int i) {
 
     }
 
@@ -81,9 +97,9 @@ public class EditActivity extends BaseActivity {
         if (uris.size() < 9) {
             uris.add(null);
         }
-        Log.e(tag,"uris'size is : " + uris.size());
-        binding.imageRecycler.setLayoutManager(new GridLayoutManager(this, 3,GridLayoutManager.VERTICAL,false));
-        binding.imageRecycler.addItemDecoration(new SpacesItemDecoration(MDP_PX.dip2px(10f),MDP_PX.dip2px(10f)));
+        Log.e(tag, "uris'size is : " + uris.size());
+        binding.imageRecycler.setLayoutManager(new GridLayoutManager(this, 3, GridLayoutManager.VERTICAL, false));
+        binding.imageRecycler.addItemDecoration(new SpacesItemDecoration(MDP_PX.dip2px(10f), MDP_PX.dip2px(10f)));
         binding.imageRecycler.setAdapter(adapter = new ImageAdapter());
     }
 
@@ -149,10 +165,18 @@ public class EditActivity extends BaseActivity {
         }
     }
 
-    //全屏播放视频，并可以执行删除操作。
+    //全屏播放视频
     public void fullScreenPlayVideo(View view) {
         binding.fullScreenLayout.setVisibility(View.VISIBLE);
         playVideo();
+    }
+    private int currentPosition;
+    private void fullScreenHandleImage() {
+        binding.fullScreenImageLayout.setVisibility(View.VISIBLE);
+        pagerAdapter.clear();
+        pagerAdapter.addAll(uris);
+        pagerAdapter.notifyDataSetChanged();
+        binding.previewViewpager.setCurrentItem(currentPosition);
     }
 
     private void playVideo() {
@@ -211,6 +235,7 @@ public class EditActivity extends BaseActivity {
 
     }
 
+    //执行删除操作
     public void delete(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("提示");
@@ -234,6 +259,15 @@ public class EditActivity extends BaseActivity {
         builder.show();
     }
 
+    public void hideFullScreenImage(View view) {
+        binding.fullScreenImageLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onClick() {
+
+    }
+
     private class ImageAdapter extends RecyclerView.Adapter<ImageHoder> {
         @NonNull
         @Override
@@ -243,7 +277,7 @@ public class EditActivity extends BaseActivity {
 
         @Override
         public void onBindViewHolder(@NonNull ImageHoder imageHoder, int i) {
-            imageHoder.setData(uris.get(i));
+            imageHoder.setData(i);
         }
 
         @Override
@@ -260,20 +294,30 @@ public class EditActivity extends BaseActivity {
             this.binding = binding;
         }
 
-        public void setData(Uri uri) {
-            if (uri!=null) {
+        public void setData(final int position) {
+            final Uri uri = uris.get(position);
+            if (uri != null) {
                 Glide.with(EditActivity.this)
                         .load(uri)
                         .centerCrop()
                         .override(300, 300)
                         .into(binding.image);
-            }else{
+                binding.image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        currentPosition = position;
+                        fullScreenHandleImage();
+                    }
+                });
+            } else {
                 Glide.with(EditActivity.this)
                         .load(R.drawable.img_add)
                         .centerCrop()
                         .override(300, 300)
                         .into(binding.image);
             }
+
+
         }
 
     }
