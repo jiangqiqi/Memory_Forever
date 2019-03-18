@@ -46,6 +46,7 @@ public class EditActivity extends BaseActivity implements ViewPager.OnPageChange
     private Uri uri;
     private ArrayList<Uri> uris;
     private PreviewPagerAdapter pagerAdapter;
+
     @Override
     protected void initView() {
         super.initView();
@@ -75,12 +76,12 @@ public class EditActivity extends BaseActivity implements ViewPager.OnPageChange
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
-        if (keyCode == KeyEvent.KEYCODE_BACK){
-            if (binding.fullScreenImageLayout.getVisibility() == View.VISIBLE){
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (binding.fullScreenImageLayout.getVisibility() == View.VISIBLE) {
                 binding.fullScreenImageLayout.setVisibility(View.GONE);
                 return false;
             }
-            if (binding.fullScreenLayout.getVisibility() == View.VISIBLE){
+            if (binding.fullScreenLayout.getVisibility() == View.VISIBLE) {
                 binding.fullScreenLayout.setVisibility(View.GONE);
                 return false;
             }
@@ -90,17 +91,15 @@ public class EditActivity extends BaseActivity implements ViewPager.OnPageChange
 
     @Override
     public void onPageScrolled(int i, float v, int i1) {
-
     }
 
     @Override
     public void onPageSelected(int i) {
-
+        binding.imagePosition.setText((i + 1) + "/" + (uris.size() - 1));
     }
 
     @Override
     public void onPageScrollStateChanged(int i) {
-
     }
 
     /**
@@ -186,9 +185,12 @@ public class EditActivity extends BaseActivity implements ViewPager.OnPageChange
         binding.fullScreenLayout.setVisibility(View.VISIBLE);
         playVideo();
     }
+
     private int currentPosition;
+
     private void fullScreenHandleImage() {
         binding.fullScreenImageLayout.setVisibility(View.VISIBLE);
+        binding.imagePosition.setText((currentPosition + 1) + "/" + (uris.size() - 1));
         pagerAdapter.clear();
         pagerAdapter.addAll(uris);
         pagerAdapter.notifyDataSetChanged();

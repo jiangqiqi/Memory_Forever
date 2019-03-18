@@ -162,6 +162,14 @@
                     android:onClick="hideFullScreenImage"
                     android:scaleType="center"
                     android:src="@drawable/img_back" />
+                <TextView
+                    android:id="@+id/image_position"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="left|center_vertical"
+                    android:textSize="20sp"
+                    android:layout_marginLeft="40dp"
+                    />
 
                 <ImageView
                     android:layout_width="wrap_content"
