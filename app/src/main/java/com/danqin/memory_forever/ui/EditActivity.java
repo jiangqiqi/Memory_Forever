@@ -1,8 +1,6 @@
 package com.danqin.memory_forever.ui;
 
-import android.app.AlertDialog;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
@@ -26,17 +24,17 @@ import com.danqin.memory_forever.R;
 import com.danqin.memory_forever.databinding.EditLayoutBinding;
 import com.danqin.memory_forever.databinding.ImgItemBinding;
 import com.danqin.memory_forever.utils.MDP_PX;
-import com.danqin.memory_forever.view.PromotionDialog;
+import com.danqin.memory_forever.view.dialog.PromotionDialog;
 import com.danqin.memory_forever.view.SpacesItemDecoration;
+import com.danqin.memory_forever.view.dialog.SelectDialog;
 import com.danqin.memory_forever.view.preview.PreviewItemFragment;
 import com.danqin.memory_forever.view.preview.PreviewPagerAdapter;
 import com.zhihu.matisse.listener.OnFragmentInteractionListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Handler;
 
-public class EditActivity extends ResActivity implements ViewPager.OnPageChangeListener, OnFragmentInteractionListener {
+public class EditActivity extends ResActivity implements ViewPager.OnPageChangeListener, OnFragmentInteractionListener, SelectDialog.OnSelectListener {
 
     private EditLayoutBinding binding;
     private MediaPlayer player;
@@ -268,44 +266,14 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
     }
 
     public void addVideo(View view) {
-
+        showSelectDialog();
     }
 
     public void hideFullScreenImage(View view) {
         binding.fullScreenImageLayout.setVisibility(View.GONE);
     }
 
-    @Override
-    public void onClick() {
-
-    }
-
     public void deleteImg(View view) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle(getString(R.string.promotion));
-//        builder.setMessage(getString(R.string.confirm_delete_image));
-//        builder.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//                uris.remove(currentPosition);
-//                pagerAdapter.remove(currentPosition);
-//                pagerAdapter.notifyDataSetChanged();
-//                adapter.notifyDataSetChanged();
-//                if (pagerAdapter.getItems().size() == 0){
-//                    binding.fullScreenImageLayout.setVisibility(View.GONE);
-//                }
-//                binding.imagePosition.setText((currentPosition + 1) + "/" + pagerAdapter.getItems().size());
-//            }
-//        });
-//        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-//        builder.show();
-
         new PromotionDialog(this, R.style.dialog, getString(R.string.confirm_delete_image), new PromotionDialog.OnCloseListener() {
             @Override
             public void onClick(Dialog dialog, boolean confirm) {
@@ -325,27 +293,6 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
     }
 
     public void deleteVideo(View view) {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle(getString(R.string.promotion));
-//        builder.setMessage(getString(R.string.confirm_delete_video));
-//        builder.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//                hideFullScreen();
-//                uri = null;
-//                binding.videoLayout.setVisibility(View.GONE);
-//                binding.imgAdd.setVisibility(View.VISIBLE);
-//            }
-//        });
-//        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
-//            @Override
-//            public void onClick(DialogInterface dialog, int which) {
-//                dialog.dismiss();
-//            }
-//        });
-//        builder.show();
-
         new PromotionDialog(this, R.style.dialog, getString(R.string.confirm_delete_video), new PromotionDialog.OnCloseListener() {
             @Override
             public void onClick(Dialog dialog, boolean confirm) {
@@ -358,6 +305,35 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
             }
         }).setTitle(getString(R.string.promotion)).show();
 
+    }
+
+    private void showSelectDialog(){
+        new SelectDialog(EditActivity.this).setOnSelectListener(this).show();
+    }
+
+    @Override
+    public void selectCapture() {
+        if (requestCode == REQUEST_CODE_IMAGE_CAPTURE || requestCode == REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM){
+            captureImg();
+        }
+        if (requestCode == REQUEST_CODE_VIDEO_CAPTURE||requestCode == REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM){
+            captureVideo();
+        }
+    }
+
+    @Override
+    public void selectPhoto() {
+        if (requestCode == REQUEST_CODE_IMAGE_CAPTURE || requestCode == REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM){
+            selectImgFromPhotoAlbum();
+        }
+        if (requestCode == REQUEST_CODE_VIDEO_CAPTURE || requestCode == REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM){
+            selectVideoFromPhotoAlbum();
+        }
+    }
+
+    @Override
+    public void onClick() {
+        
     }
 
     private class ImageAdapter extends RecyclerView.Adapter<ImageHoder> {
@@ -411,7 +387,7 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
                     @Override
                     public void onClick(View v) {
                         Log.e(tag, "添加图片");
-
+                        showSelectDialog();
                     }
                 });
             }

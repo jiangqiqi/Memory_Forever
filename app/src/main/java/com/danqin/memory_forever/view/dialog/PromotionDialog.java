@@ -1,4 +1,4 @@
-package com.danqin.memory_forever.view;
+package com.danqin.memory_forever.view.dialog;
 
 import android.app.Dialog;
 import android.content.Context;

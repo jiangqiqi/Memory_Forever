@@ -17,7 +17,7 @@ import com.danqin.memory_forever.R;
 import com.danqin.memory_forever.bean.Module;
 import com.danqin.memory_forever.databinding.ActivityMainBinding;
 import com.danqin.memory_forever.databinding.ModuleItemBinding;
-import com.danqin.memory_forever.view.AddModuleDialog;
+import com.danqin.memory_forever.view.dialog.AddModuleDialog;
 
 import java.util.ArrayList;
 import java.util.List;
