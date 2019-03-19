@@ -333,7 +333,7 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
 
     @Override
     public void onClick() {
-        
+
     }
 
     private class ImageAdapter extends RecyclerView.Adapter<ImageHoder> {

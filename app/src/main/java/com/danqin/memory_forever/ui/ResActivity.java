@@ -36,7 +36,7 @@ public abstract class ResActivity extends BaseActivity {
     }
 
     protected File file;
-
+    protected boolean isCaptureImg;
     //调用系统现有相机拍照
     protected void captureImg() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -49,6 +49,7 @@ public abstract class ResActivity extends BaseActivity {
         Uri imageUri = Uri.fromFile(file);
         intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
         startActivityForResult(intent, REQUEST_CODE_IMAGE_CAPTURE);
+        isCaptureImg = true;
     }
 
     //调用系统现有相机拍视频

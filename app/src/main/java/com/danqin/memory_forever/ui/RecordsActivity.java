@@ -103,13 +103,20 @@ public class RecordsActivity extends ResActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Intent intent = new Intent(this, EditActivity.class);
-        if (data == null){
-            return;
+        if (data == null) {
+            if (!isCaptureImg) {
+                return;
+            } else {
+                if (file.length() == 0) {
+                    return;
+                }
+            }
+            isCaptureImg = false;
         }
         switch (requestCode) {
             case REQUEST_CODE_IMAGE_CAPTURE:
                 intent.putExtra(KEY_REQUEST_CODE, REQUEST_CODE_IMAGE_CAPTURE);
-                intent.putExtra(KEY_RESOURCE_URI, file);
+                intent.putExtra(KEY_RESOURCE_URI, Uri.fromFile(file));
                 break;
             case REQUEST_CODE_VIDEO_CAPTURE:
                 intent.putExtra(KEY_REQUEST_CODE, REQUEST_CODE_VIDEO_CAPTURE);
@@ -117,14 +124,14 @@ public class RecordsActivity extends ResActivity {
                 intent.putExtra(KEY_RESOURCE_URI, uri);
                 break;
             case REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM:
-                intent.putExtra(KEY_REQUEST_CODE,REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM);
+                intent.putExtra(KEY_REQUEST_CODE, REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM);
                 ArrayList<Uri> selectedImgUris = (ArrayList<Uri>) Matisse.obtainResult(data);
-                intent.putParcelableArrayListExtra(KEY_RESOURCE_URIS,selectedImgUris);
+                intent.putParcelableArrayListExtra(KEY_RESOURCE_URIS, selectedImgUris);
                 break;
             case REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM:
                 ArrayList<Uri> selectedVideoUris = (ArrayList<Uri>) Matisse.obtainResult(data);
                 intent.putExtra(KEY_RESOURCE_URI, selectedVideoUris.get(0));
-                intent.putExtra(KEY_REQUEST_CODE,REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM);
+                intent.putExtra(KEY_REQUEST_CODE, REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM);
                 break;
         }
         startActivity(intent);
