@@ -26,11 +26,13 @@ import com.danqin.memory_forever.databinding.EditLayoutBinding;
 import com.danqin.memory_forever.databinding.ImgItemBinding;
 import com.danqin.memory_forever.utils.MDP_PX;
 import com.danqin.memory_forever.view.SpacesItemDecoration;
+import com.danqin.memory_forever.view.preview.PreviewItemFragment;
 import com.danqin.memory_forever.view.preview.PreviewPagerAdapter;
 import com.zhihu.matisse.listener.OnFragmentInteractionListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.logging.Handler;
 
 public class EditActivity extends BaseActivity implements ViewPager.OnPageChangeListener, OnFragmentInteractionListener {
 
@@ -69,10 +71,19 @@ public class EditActivity extends BaseActivity implements ViewPager.OnPageChange
                 handleViewWithVideo();
                 break;
         }
-        pagerAdapter = new PreviewPagerAdapter(getSupportFragmentManager());
+        pagerAdapter = new PreviewPagerAdapter(getSupportFragmentManager(), pagerClickListener);
         binding.previewViewpager.setAdapter(pagerAdapter);
         binding.previewViewpager.addOnPageChangeListener(this);
     }
+
+    private PreviewItemFragment.OnPagerClickListener pagerClickListener = new PreviewItemFragment.OnPagerClickListener() {
+        @Override
+        public void pagerClick() {
+            if (binding.fullScreenImageTopLayout.getVisibility() == View.GONE) {
+                binding.fullScreenImageTopLayout.setVisibility(View.VISIBLE);
+            }
+        }
+    };
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -95,7 +106,11 @@ public class EditActivity extends BaseActivity implements ViewPager.OnPageChange
 
     @Override
     public void onPageSelected(int i) {
+        currentPosition = i;
         binding.imagePosition.setText((i + 1) + "/" + (uris.size() - 1));
+        if (binding.fullScreenImageTopLayout.getVisibility() == View.VISIBLE) {
+            binding.fullScreenImageTopLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -189,12 +204,13 @@ public class EditActivity extends BaseActivity implements ViewPager.OnPageChange
     private int currentPosition;
 
     private void fullScreenHandleImage() {
-        binding.fullScreenImageLayout.setVisibility(View.VISIBLE);
-        binding.imagePosition.setText((currentPosition + 1) + "/" + (uris.size() - 1));
         pagerAdapter.clear();
         pagerAdapter.addAll(uris);
         pagerAdapter.notifyDataSetChanged();
         binding.previewViewpager.setCurrentItem(currentPosition);
+        binding.imagePosition.setText((currentPosition + 1) + "/" + (uris.size() - 1));
+
+        binding.fullScreenImageLayout.setVisibility(View.VISIBLE);
     }
 
     private void playVideo() {
@@ -253,12 +269,47 @@ public class EditActivity extends BaseActivity implements ViewPager.OnPageChange
 
     }
 
-    //执行删除操作
-    public void delete(View view) {
+    public void hideFullScreenImage(View view) {
+        binding.fullScreenImageLayout.setVisibility(View.GONE);
+    }
+
+    @Override
+    public void onClick() {
+
+    }
+
+    public void deleteImg(View view) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("提示");
-        builder.setMessage("确定要删除这段视频吗？");
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        builder.setTitle(getString(R.string.promotion));
+        builder.setMessage(getString(R.string.confirm_delete_image));
+        builder.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+                uris.remove(currentPosition);
+                pagerAdapter.remove(currentPosition);
+                pagerAdapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
+                if (pagerAdapter.getItems().size() == 0){
+                    binding.fullScreenImageLayout.setVisibility(View.GONE);
+                }
+                binding.imagePosition.setText((currentPosition + 1) + "/" + pagerAdapter.getItems().size());
+            }
+        });
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    public void deleteVideo(View view) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(getString(R.string.promotion));
+        builder.setMessage(getString(R.string.confirm_delete_video));
+        builder.setPositiveButton(getString(R.string.confirm), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
@@ -268,22 +319,13 @@ public class EditActivity extends BaseActivity implements ViewPager.OnPageChange
                 binding.imgAdd.setVisibility(View.VISIBLE);
             }
         });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(getString(R.string.cancel), new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
                 dialog.dismiss();
             }
         });
         builder.show();
-    }
-
-    public void hideFullScreenImage(View view) {
-        binding.fullScreenImageLayout.setVisibility(View.GONE);
-    }
-
-    @Override
-    public void onClick() {
-
     }
 
     private class ImageAdapter extends RecyclerView.Adapter<ImageHoder> {

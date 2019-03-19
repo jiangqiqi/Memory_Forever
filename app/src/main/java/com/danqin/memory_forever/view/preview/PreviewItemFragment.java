@@ -21,11 +21,13 @@ import com.zhihu.matisse.internal.utils.PhotoMetadataUtils;
 import it.sephiroth.android.library.imagezoom.ImageViewTouchBase;
 
 
-public class PreviewItemFragment extends Fragment {
+public class PreviewItemFragment extends Fragment implements View.OnClickListener {
 
 
     public static final String ARGS_URI = "args_uri";
     private PreviewItemBinding binding;
+    private Uri uri;
+    private OnPagerClickListener listener;
 
     public static PreviewItemFragment newInstance(Uri uri) {
         PreviewItemFragment fragment = new PreviewItemFragment();
@@ -35,19 +37,38 @@ public class PreviewItemFragment extends Fragment {
         return fragment;
     }
 
+    public PreviewItemFragment setOnPagerClickListener(OnPagerClickListener listener) {
+        this.listener = listener;
+        return this;
+    }
+
+    public interface OnPagerClickListener {
+        void pagerClick();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = DataBindingUtil.inflate(inflater, R.layout.preview_item,container,false);
+        binding = DataBindingUtil.inflate(inflater, R.layout.preview_item, container, false);
+        binding.imageView.setOnClickListener(this);
         return binding.getRoot();
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Uri uri = getArguments().getParcelable(ARGS_URI);
+        uri = getArguments().getParcelable(ARGS_URI);
         Glide.with(getContext())
                 .load(uri)
+                .centerCrop()
                 .into(binding.imageView);
+    }
+
+    @Override
+    public void onClick(View v) {
+        Log.e(getClass().getName(), "on click   " + uri);
+        if (null != listener) {
+            listener.pagerClick();
+        }
     }
 }

@@ -12,4 +12,7 @@
     <string name="invitate_student_greet">邀请\n赠言</string>
     <string name="publish">发表</string>
     <string name="want_say_something">这一刻想说点什么...</string>
+    <string name="promotion">提示</string>
+    <string name="confirm_delete_video">确定要删除这段视频吗？</string>
+    <string name="confirm_delete_image">确定要删除这张照片吗？</string>
 </resources>

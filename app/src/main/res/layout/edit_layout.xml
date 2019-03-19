@@ -121,7 +121,7 @@
                     android:layout_gravity="center_vertical|end"
                     android:layout_marginRight="10dp"
                     android:src="@android:drawable/ic_menu_delete"
-                    android:onClick="delete"
+                    android:onClick="deleteVideo"
                     />
             </FrameLayout>
             <SurfaceView
@@ -145,6 +145,15 @@
             app:layout_constraintBottom_toBottomOf="parent"
             android:visibility="gone"
             >
+            <com.danqin.memory_forever.view.preview.PreviewViewPager
+                android:id="@+id/preview_viewpager"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                app:layout_constraintLeft_toLeftOf="@+id/full_screen_image_layout"
+                app:layout_constraintRight_toRightOf="@+id/full_screen_image_layout"
+                app:layout_constraintBottom_toBottomOf="@+id/full_screen_image_layout"
+                app:layout_constraintTop_toTopOf="@+id/full_screen_image_layout"
+                />
             <FrameLayout
                 android:id="@+id/full_screen_image_top_layout"
                 android:layout_width="0dp"
@@ -178,18 +187,9 @@
                     android:layout_gravity="center_vertical|end"
                     android:layout_marginRight="10dp"
                     android:src="@android:drawable/ic_menu_delete"
-                    android:onClick="delete"
+                    android:onClick="deleteImg"
                     />
             </FrameLayout>
-            <com.danqin.memory_forever.view.preview.PreviewViewPager
-                android:id="@+id/preview_viewpager"
-                android:layout_width="0dp"
-                android:layout_height="0dp"
-                app:layout_constraintLeft_toLeftOf="@+id/full_screen_image_layout"
-                app:layout_constraintRight_toRightOf="@+id/full_screen_image_layout"
-                app:layout_constraintBottom_toBottomOf="@+id/full_screen_image_layout"
-                app:layout_constraintTop_toBottomOf="@+id/full_screen_image_top_layout"
-                />
         </android.support.constraint.ConstraintLayout>
     </android.support.constraint.ConstraintLayout>
 </layout>
