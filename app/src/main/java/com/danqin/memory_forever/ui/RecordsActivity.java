@@ -30,18 +30,10 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-public class RecordsActivity extends BaseActivity {
+public class RecordsActivity extends ResActivity {
     private RecordsLayoutBinding binding;
     private static final int[] ITEM_DRAWABLES = {R.drawable.composer_camera, R.drawable.composer_music,
             R.drawable.composer_place, R.drawable.composer_sleep, R.drawable.composer_thought, R.drawable.composer_with};
-
-    public static final int REQUEST_CODE_IMAGE_CAPTURE = 10000;
-    public static final int REQUEST_CODE_VIDEO_CAPTURE = 10001;
-    public static final int REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM = 10002;
-    public static final int REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM = 10003;
-    public static final String KEY_REQUEST_CODE = "requestCode";
-    public static final String KEY_RESOURCE_URI = "resourceUri";
-    public static final String KEY_RESOURCE_URIS = "resourceUris";
 
     @Override
     protected void setContentView() {
@@ -106,60 +98,6 @@ public class RecordsActivity extends BaseActivity {
             });
         }
     }
-
-
-    private void selectVideoFromPhotoAlbum(){
-        Matisse.from(this)
-                .choose(MimeType.ofVideo())
-                .theme(R.style.Matisse_Zhihu)
-                .showSingleMediaType(true)
-                .countable(false)
-                .maxSelectable(1)
-                .originalEnable(true)
-                .maxOriginalSize(10)
-                .imageEngine(new Glide4Engine())
-                .forResult(REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM);
-    }
-
-    //从相册中选取照片
-    private void selectImgFromPhotoAlbum(){
-        Matisse.from(this)
-                .choose(MimeType.ofImage())
-                .theme(R.style.Matisse_Zhihu)
-                .showSingleMediaType(true)
-                .countable(false)
-                .maxSelectable(9)
-                .originalEnable(true)
-                .maxOriginalSize(10)
-                .imageEngine(new Glide4Engine())
-                .forResult(REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM);
-
-    }
-
-
-    private File file;
-
-    //调用系统现有相机拍照
-    private void captureImg() {
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        intent.addCategory(Intent.CATEGORY_DEFAULT);
-
-        file = new File(Environment.getExternalStorageDirectory() + "/Memory/images/" + System.currentTimeMillis() + ".png");
-        if (file.exists()) {
-            file.delete();
-        }
-        Uri imageUri = Uri.fromFile(file);
-        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUri);
-        startActivityForResult(intent, REQUEST_CODE_IMAGE_CAPTURE);
-    }
-
-    //调用系统现有相机拍视频
-    private void captureVideo() {
-        Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT,10);
-        startActivityForResult(intent, REQUEST_CODE_VIDEO_CAPTURE);
-    }
-
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

@@ -34,7 +34,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.logging.Handler;
 
-public class EditActivity extends BaseActivity implements ViewPager.OnPageChangeListener, OnFragmentInteractionListener {
+public class EditActivity extends ResActivity implements ViewPager.OnPageChangeListener, OnFragmentInteractionListener {
 
     private EditLayoutBinding binding;
     private MediaPlayer player;
@@ -54,20 +54,20 @@ public class EditActivity extends BaseActivity implements ViewPager.OnPageChange
         super.initView();
         binding.editContent.requestFocus();
         Intent intent = getIntent();
-        requestCode = intent.getIntExtra(RecordsActivity.KEY_REQUEST_CODE, 0);
-        uri = intent.getParcelableExtra(RecordsActivity.KEY_RESOURCE_URI);
+        requestCode = intent.getIntExtra(KEY_REQUEST_CODE, 0);
+        uri = intent.getParcelableExtra(KEY_RESOURCE_URI);
         switch (requestCode) {
-            case RecordsActivity.REQUEST_CODE_IMAGE_CAPTURE:
+            case REQUEST_CODE_IMAGE_CAPTURE:
                 handleViewWithImgCap();
                 break;
-            case RecordsActivity.REQUEST_CODE_VIDEO_CAPTURE:
+            case REQUEST_CODE_VIDEO_CAPTURE:
                 handleViewWithVideo();
                 break;
-            case RecordsActivity.REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM:
-                uris = intent.getParcelableArrayListExtra(RecordsActivity.KEY_RESOURCE_URIS);
+            case REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM:
+                uris = intent.getParcelableArrayListExtra(KEY_RESOURCE_URIS);
                 handleViewWithImgs();
                 break;
-            case RecordsActivity.REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM:
+            case REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM:
                 handleViewWithVideo();
                 break;
         }
@@ -375,9 +375,13 @@ public class EditActivity extends BaseActivity implements ViewPager.OnPageChange
                         .centerCrop()
                         .override(300, 300)
                         .into(binding.image);
+                binding.image.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.e(tag,"添加图片");
+                    }
+                });
             }
-
-
         }
 
     }
