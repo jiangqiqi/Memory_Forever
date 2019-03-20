@@ -22,7 +22,7 @@ public abstract class ResActivity extends BaseActivity {
     public static final String KEY_RESOURCE_URI = "resourceUri";
     public static final String KEY_RESOURCE_URIS = "resourceUris";
 
-    protected void selectVideoFromPhotoAlbum(){
+    protected void selectVideoFromPhotoAlbum() {
         Matisse.from(this)
                 .choose(MimeType.ofVideo())
                 .theme(R.style.Matisse_Zhihu)
@@ -37,6 +37,7 @@ public abstract class ResActivity extends BaseActivity {
 
     protected File file;
     protected boolean isCaptureImg;
+
     //调用系统现有相机拍照
     protected void captureImg() {
         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -55,21 +56,23 @@ public abstract class ResActivity extends BaseActivity {
     //调用系统现有相机拍视频
     protected void captureVideo() {
         Intent intent = new Intent(MediaStore.ACTION_VIDEO_CAPTURE);
-        intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT,10);
+        intent.putExtra(MediaStore.EXTRA_DURATION_LIMIT, 10);
         startActivityForResult(intent, REQUEST_CODE_VIDEO_CAPTURE);
     }
 
 
+    private static final int MAX_SELECTABLE_PHOTOS_SIZE = 9;
+    protected int size = 0;
 
 
     //从相册中选取照片
-    protected void selectImgFromPhotoAlbum(){
+    protected void selectImgFromPhotoAlbum() {
         Matisse.from(this)
                 .choose(MimeType.ofImage())
                 .theme(R.style.Matisse_Zhihu)
                 .showSingleMediaType(true)
                 .countable(false)
-                .maxSelectable(9)
+                .maxSelectable(MAX_SELECTABLE_PHOTOS_SIZE - size)
                 .originalEnable(true)
                 .maxOriginalSize(10)
                 .imageEngine(new Glide4Engine())

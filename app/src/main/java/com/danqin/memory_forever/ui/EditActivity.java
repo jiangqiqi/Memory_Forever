@@ -8,6 +8,7 @@ import android.media.MediaPlayer;
 import android.net.Uri;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,10 +30,13 @@ import com.danqin.memory_forever.view.SpacesItemDecoration;
 import com.danqin.memory_forever.view.dialog.SelectDialog;
 import com.danqin.memory_forever.view.preview.PreviewItemFragment;
 import com.danqin.memory_forever.view.preview.PreviewPagerAdapter;
+import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.listener.OnFragmentInteractionListener;
 
 import java.io.IOException;
 import java.util.ArrayList;
+
+import static android.media.CamcorderProfile.get;
 
 public class EditActivity extends ResActivity implements ViewPager.OnPageChangeListener, OnFragmentInteractionListener, SelectDialog.OnSelectListener {
 
@@ -58,7 +62,9 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
         uri = intent.getParcelableExtra(KEY_RESOURCE_URI);
         switch (requestCode) {
             case REQUEST_CODE_IMAGE_CAPTURE:
-                handleViewWithImgCap();
+                uris = new ArrayList<>();
+                uris.add(uri);
+                handleViewWithImgs();
                 break;
             case REQUEST_CODE_VIDEO_CAPTURE:
                 handleViewWithVideo();
@@ -101,6 +107,41 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
     }
 
     @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (data == null) {
+            if (!isCaptureImg) {
+                return;
+            } else {
+                if (file.length() == 0) {
+                    return;
+                }
+            }
+            isCaptureImg = false;
+        }
+        switch (requestCode) {
+            case REQUEST_CODE_IMAGE_CAPTURE:
+                uri = Uri.fromFile(file);
+                uris.add(uris.size() - 1, uri);
+                handleViewWithImgs();
+                break;
+            case REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM:
+                uris.remove(null);
+                uris.addAll(Matisse.obtainResult(data));
+                handleViewWithImgs();
+                break;
+            case REQUEST_CODE_VIDEO_CAPTURE:
+                uri = data.getData();
+                handleViewWithVideo();
+                break;
+            case REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM:
+                uri = Matisse.obtainResult(data).get(0);
+                handleViewWithVideo();
+                break;
+        }
+    }
+
+    @Override
     public void onPageScrolled(int i, float v, int i1) {
     }
 
@@ -124,7 +165,7 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
 
     private void handleViewWithImgs() {
         binding.videoLayout.setVisibility(View.GONE);
-        if (uris.size() < 9) {
+        if (uris.size() < 9 && !uris.contains(null)) {
             uris.add(null);
         }
         Log.e(tag, "uris'size is : " + uris.size());
@@ -307,26 +348,27 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
 
     }
 
-    private void showSelectDialog(){
+    private void showSelectDialog() {
         new SelectDialog(EditActivity.this).setOnSelectListener(this).show();
     }
 
     @Override
     public void selectCapture() {
-        if (requestCode == REQUEST_CODE_IMAGE_CAPTURE || requestCode == REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM){
+        if (requestCode == REQUEST_CODE_IMAGE_CAPTURE || requestCode == REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM) {
             captureImg();
         }
-        if (requestCode == REQUEST_CODE_VIDEO_CAPTURE||requestCode == REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM){
+        if (requestCode == REQUEST_CODE_VIDEO_CAPTURE || requestCode == REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM) {
             captureVideo();
         }
     }
 
     @Override
     public void selectPhoto() {
-        if (requestCode == REQUEST_CODE_IMAGE_CAPTURE || requestCode == REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM){
+        if (requestCode == REQUEST_CODE_IMAGE_CAPTURE || requestCode == REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM) {
+            size = uris.size() - 1;
             selectImgFromPhotoAlbum();
         }
-        if (requestCode == REQUEST_CODE_VIDEO_CAPTURE || requestCode == REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM){
+        if (requestCode == REQUEST_CODE_VIDEO_CAPTURE || requestCode == REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM) {
             selectVideoFromPhotoAlbum();
         }
     }
@@ -340,7 +382,7 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
         @NonNull
         @Override
         public ImageHoder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            return new ImageHoder((ImgItemBinding) DataBindingUtil.inflate(LayoutInflater.from(getApplicationContext()), R.layout.img_item, null, false));
+            return new ImageHoder((ImgItemBinding) DataBindingUtil.inflate(LayoutInflater.from(getApplicationContext()), R.layout.img_item, viewGroup, false));
         }
 
         @Override
@@ -368,7 +410,6 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
                 Glide.with(EditActivity.this)
                         .load(uri)
                         .centerCrop()
-                        .override(300, 300)
                         .into(binding.image);
                 binding.image.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -381,7 +422,6 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
                 Glide.with(EditActivity.this)
                         .load(R.drawable.img_add)
                         .centerCrop()
-                        .override(300, 300)
                         .into(binding.image);
                 binding.image.setOnClickListener(new View.OnClickListener() {
                     @Override
