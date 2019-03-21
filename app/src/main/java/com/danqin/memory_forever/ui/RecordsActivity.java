@@ -1,30 +1,26 @@
 package com.danqin.memory_forever.ui;
 
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
-import android.database.Cursor;
 import android.databinding.DataBindingUtil;
-import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
-import android.provider.MediaStore;
-import android.support.v4.content.FileProvider;
-import android.util.Log;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.danqin.memory_forever.R;
 import com.danqin.memory_forever.bean.Module;
+import com.danqin.memory_forever.bean.Record;
+import com.danqin.memory_forever.databinding.RecordItemBinding;
 import com.danqin.memory_forever.databinding.RecordsLayoutBinding;
-import com.danqin.memory_forever.utils.Glide4Engine;
-import com.danqin.memory_forever.utils.MyGlideEngine;
 import com.zhihu.matisse.Matisse;
-import com.zhihu.matisse.MimeType;
-import com.zhihu.matisse.engine.impl.GlideEngine;
-import com.zhihu.matisse.engine.impl.PicassoEngine;
-import com.zhihu.matisse.filter.Filter;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -34,6 +30,8 @@ public class RecordsActivity extends ResActivity {
     private RecordsLayoutBinding binding;
     private static final int[] ITEM_DRAWABLES = {R.drawable.composer_camera, R.drawable.composer_music,
             R.drawable.composer_place, R.drawable.composer_sleep, R.drawable.composer_thought, R.drawable.composer_with};
+    String s = "但发斯蒂芬的佛教啊哦啊二等奖发了恐惧似懂非懂，爱递交奇怪阿尔发票奥支付到上世纪的阿斯顿发送到撒旦法大的事发的爱的色放的阿斯顿发阿斯顿发阿萨德发的多发点";
+    private List<Record> records;
 
     @Override
     protected void setContentView() {
@@ -50,6 +48,10 @@ public class RecordsActivity extends ResActivity {
         Module module = (Module) getIntent().getSerializableExtra(MainActivity.KEY_MODULE);
         binding.topLayout.moduleName.setText(module.getName());
         initArcMenu();
+        binding.customImg1.setType(1);
+        binding.customImg2.setType(2);
+        binding.customImg3.setType(3);
+        binding.customImg4.setType(4);
     }
 
     @Override
@@ -90,6 +92,7 @@ public class RecordsActivity extends ResActivity {
                             selectVideoFromPhotoAlbum();
                             break;
                         case 4:
+                            editOnlyText();
                             break;
                         case 5:
                             break;
@@ -98,6 +101,13 @@ public class RecordsActivity extends ResActivity {
             });
         }
     }
+
+    private void editOnlyText() {
+        Intent intent = new Intent(this, EditActivity.class);
+        intent.putExtra(KEY_REQUEST_CODE, REQUEST_CODE_ONLY_TEXT);
+        startActivity(intent);
+    }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -137,4 +147,49 @@ public class RecordsActivity extends ResActivity {
         startActivity(intent);
 
     }
+
+    private class RecordAdapter extends RecyclerView.Adapter<RecordHolder>{
+
+        @NonNull
+        @Override
+        public RecordHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
+            return new RecordHolder((RecordItemBinding) DataBindingUtil.inflate(LayoutInflater.from(getApplicationContext()),R.layout.record_item,null,false));
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecordHolder recordHolder, int i) {
+            recordHolder.setData(records.get(i));
+        }
+
+        @Override
+        public int getItemCount() {
+            return records.size();
+        }
+    }
+
+    private class RecordHolder extends RecyclerView.ViewHolder {
+        RecordItemBinding binding;
+
+        public RecordHolder(RecordItemBinding binding) {
+            super(binding.getRoot());
+            this.binding = binding;
+        }
+
+        public void setData(Record record) {
+            binding.videoFlag.setVisibility(TextUtils.isEmpty(record.getVideoUrl()) ? View.GONE : View.VISIBLE);
+            binding.contentTv.setText(record.getContent());
+            String date = "";
+            int day = record.getDay();
+            if (day < 9) {
+                date = 0 + date + day;
+            }else{
+                date = Integer.toString(day);
+            }
+            binding.dateTv.setText(date);
+            binding.monthTv.setText(record.getMonth()+"月");
+            //TODO:根据uri设置图片
+        }
+
+    }
+
 }

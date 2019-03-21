@@ -138,6 +138,8 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
                 uri = Matisse.obtainResult(data).get(0);
                 handleViewWithVideo();
                 break;
+            case REQUEST_CODE_ONLY_TEXT:
+                break;
         }
     }
 
