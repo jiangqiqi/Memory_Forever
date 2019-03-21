@@ -1,5 +1,7 @@
 package com.danqin.memory_forever.bean;
 
+import android.net.Uri;
+
 import java.util.List;
 
 public class Record {
@@ -14,6 +16,26 @@ public class Record {
     private int day;
 
     private int month;
+    //做测试用
+    private int type;
+
+    private Uri videoUri;
+
+    public Uri getVideoUri() {
+        return videoUri;
+    }
+
+    public void setVideoUri(Uri videoUri) {
+        this.videoUri = videoUri;
+    }
+
+    public int getType() {
+        return type;
+    }
+
+    public void setType(int type) {
+        this.type = type;
+    }
 
     public String getContent() {
         return content;

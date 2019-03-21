@@ -4,7 +4,7 @@
     <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/date_tv"
@@ -25,13 +25,13 @@
             app:layout_constraintBottom_toBottomOf="@+id/date_tv"
             app:layout_constraintLeft_toRightOf="@+id/date_tv" />
 
-        <ImageView
+        <com.danqin.memory_forever.view.CustomImgView
             android:id="@+id/item_img"
             android:layout_width="100dp"
             android:layout_height="100dp"
             android:layout_marginLeft="10dp"
+            android:background="@color/white"
             android:scaleType="fitXY"
-            android:src="@drawable/india_chettinad_silk_maker"
             app:layout_constraintLeft_toRightOf="@+id/month_tv"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -51,8 +51,6 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
             android:layout_marginRight="10dp"
-            android:ellipsize="end"
-            android:maxLines="3"
             android:text="但发斯蒂芬的佛教啊哦啊二等奖发了恐惧似懂非懂，爱递交奇怪阿尔发票奥支付到上世纪的阿斯顿发送到撒旦法大的事发的爱的色放的阿斯顿发阿斯顿发阿萨德发的多发点"
             app:layout_constraintLeft_toRightOf="@+id/item_img"
             app:layout_constraintRight_toRightOf="parent"

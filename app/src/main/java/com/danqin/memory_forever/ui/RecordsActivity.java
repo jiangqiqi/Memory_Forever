@@ -7,14 +7,17 @@ import android.os.Build;
 import android.os.Environment;
 import android.os.StrictMode;
 import android.support.annotation.NonNull;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.danqin.memory_forever.R;
 import com.danqin.memory_forever.bean.Module;
 import com.danqin.memory_forever.bean.Record;
@@ -38,6 +41,8 @@ public class RecordsActivity extends ResActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.records_layout);
     }
 
+    private RecordAdapter adapter;
+
     @Override
     protected void initView() {
         super.initView();
@@ -48,10 +53,12 @@ public class RecordsActivity extends ResActivity {
         Module module = (Module) getIntent().getSerializableExtra(MainActivity.KEY_MODULE);
         binding.topLayout.moduleName.setText(module.getName());
         initArcMenu();
-        binding.customImg1.setType(1);
-        binding.customImg2.setType(2);
-        binding.customImg3.setType(3);
-        binding.customImg4.setType(4);
+        binding.recordRecycler.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+        binding.recordRecycler.setAdapter(adapter = new RecordAdapter());
+//        binding.customImg1.setType(1);
+//        binding.customImg2.setType(2);
+//        binding.customImg3.setType(3);
+//        binding.customImg4.setType(4);
     }
 
     @Override
@@ -65,6 +72,22 @@ public class RecordsActivity extends ResActivity {
         if (!videoDir.exists()) {
             videoDir.mkdirs();
         }
+
+
+        records = new ArrayList<>();
+        for (int i = 0; i < 20; i++) {
+            Record record = new Record();
+            record.setContent(s);
+            record.setDay(i + 1);
+            record.setMonth(3);
+            record.setType(i + 1);
+            if (i % 3 == 0) {
+                Uri uri = Uri.parse("/external/video/media/669270");
+                record.setVideoUri(uri);
+            }
+            records.add(record);
+        }
+        adapter.notifyDataSetChanged();
     }
 
     private void initArcMenu() {
@@ -148,12 +171,12 @@ public class RecordsActivity extends ResActivity {
 
     }
 
-    private class RecordAdapter extends RecyclerView.Adapter<RecordHolder>{
+    private class RecordAdapter extends RecyclerView.Adapter<RecordHolder> {
 
         @NonNull
         @Override
         public RecordHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-            return new RecordHolder((RecordItemBinding) DataBindingUtil.inflate(LayoutInflater.from(getApplicationContext()),R.layout.record_item,null,false));
+            return new RecordHolder((RecordItemBinding) DataBindingUtil.inflate(LayoutInflater.from(getApplicationContext()), R.layout.record_item, viewGroup, false));
         }
 
         @Override
@@ -180,14 +203,22 @@ public class RecordsActivity extends ResActivity {
             binding.contentTv.setText(record.getContent());
             String date = "";
             int day = record.getDay();
-            if (day < 9) {
+            if (day < 10) {
                 date = 0 + date + day;
-            }else{
+            } else {
                 date = Integer.toString(day);
             }
             binding.dateTv.setText(date);
-            binding.monthTv.setText(record.getMonth()+"月");
+            binding.monthTv.setText(record.getMonth() + "月");
             //TODO:根据uri设置图片
+//            if (record.getVideoUri() != null) {
+//                Log.e("JiangLiang","videoUri is : " + record.getVideoUri());
+//                Glide.with(RecordsActivity.this)
+//                        .load(record.getVideoUri())
+//                        .into(binding.itemImg);
+//            } else {
+                binding.itemImg.setType(record.getType());
+//            }
         }
 
     }

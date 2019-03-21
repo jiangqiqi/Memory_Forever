@@ -65,8 +65,11 @@ public class CustomImgView extends ImageView {
     private int type;
 
     public void setType(int type) {
-        Log.e("JiangLiang", "setType.............." + type);
+        Log.e("JiangLiang", "setType.............." + type + ",width is : " + mWidth + ",height is : " + mHeight);
         this.type = type;
+        if (mWidth != 0 && mHeight != 0) {
+            createBitmap();
+        }
     }
 
     private Bitmap scaleBitmap(Bitmap src, int dstWidth, int dstHeight, boolean filter) {
@@ -78,7 +81,6 @@ public class CustomImgView extends ImageView {
             final float sx = dstWidth / (float) width;
             final float sy = dstHeight / (float) height;
             float scale = Math.max(sx, sy);
-            Log.e("JiangLiang", "sx is : " + sx + ",sy is : " + sy + ",scale is : " + scale);
             m.setScale(scale, scale);
         }
         return Bitmap.createBitmap(src, 0, 0, width, height, m, filter);
@@ -87,12 +89,15 @@ public class CustomImgView extends ImageView {
     @Override
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
-        Log.e("JiangLiang", "onSizeChanged.............." + type);
         this.mWidth = w;
         this.mHeight = h;
         paint = new Paint();
         paint.setAntiAlias(true);
+        createBitmap();
+    }
 
+    private void createBitmap() {
+        long begin = System.currentTimeMillis();
         if (urls == null) {
             return;
         }
@@ -133,7 +138,7 @@ public class CustomImgView extends ImageView {
             src3 = new Rect(0, 0, bitmap3.getWidth(), bitmap3.getHeight());
             dst3 = new Rect(mWidth / 2 + 2, mHeight / 2 + 2, mWidth, mHeight);
         }
-        if (type == 4 || urls.size() >= 4) {
+        if (type >= 4 || urls.size() >= 4) {
 
             Bitmap temp1 = BitmapFactory.decodeResource(getResources(), R.drawable.india_tanjore_market_merchant);
             bitmap1 = scaleBitmap(temp1, mWidth / 2, mHeight / 2, true);
@@ -155,22 +160,17 @@ public class CustomImgView extends ImageView {
             src4 = new Rect(0, 0, bitmap4.getWidth(), bitmap4.getHeight());
             dst4 = new Rect(mWidth / 2 + 2, mHeight / 2 + 2, mWidth, mHeight);
         }
-
+        Log.e("JiangLiang", "create bitmap take time is : " + (System.currentTimeMillis() - begin));
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-//        canvas.drawBitmap(bitmap1, src1, new Rect(0, 0, mWidth / 2 - 2, mHeight), paint);
-//        canvas.drawBitmap(bitmap2, src2, new Rect(mWidth / 2, 0, mWidth, mHeight), paint);
-//        canvas.drawBitmap(bitmap3, src3, new Rect(mWidth / 2 + 2, 0, mWidth, mHeight / 2 - 2), paint);
-//        canvas.drawBitmap(bitmap4, src4, new Rect(mWidth / 2 + 2, mHeight / 2 + 2, mWidth, mHeight), paint);
-
+        Log.e("JiangLiang", "onDraw.............." + type);
         if (urls == null) {
             return;
         }
         if (type == 1 || urls.size() == 1) {
-            Log.e("JiangLiang", "bitmap1 = " + bitmap1 + ",src1 = " + src1 + ",dst1=" + dst1 + ",paint=" + paint);
             canvas.drawBitmap(bitmap1, src1, dst1, paint);
         } else if (type == 2 || urls.size() == 2) {
             canvas.drawBitmap(bitmap1, src1, dst1, paint);
@@ -179,7 +179,7 @@ public class CustomImgView extends ImageView {
             canvas.drawBitmap(bitmap1, src1, dst1, paint);
             canvas.drawBitmap(bitmap2, src2, dst2, paint);
             canvas.drawBitmap(bitmap3, src3, dst3, paint);
-        } else if (type == 4 || urls.size() >= 4) {
+        } else if (type >= 4 || urls.size() >= 4) {
             canvas.drawBitmap(bitmap1, src1, dst1, paint);
             canvas.drawBitmap(bitmap2, src2, dst2, paint);
             canvas.drawBitmap(bitmap3, src3, dst3, paint);
