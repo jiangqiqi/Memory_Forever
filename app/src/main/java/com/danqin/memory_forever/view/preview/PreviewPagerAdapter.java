@@ -15,7 +15,8 @@ import java.util.List;
 
 public class PreviewPagerAdapter extends FragmentStatePagerAdapter {
 
-    private ArrayList<Uri> mItems = new ArrayList<>();
+    private List<Uri> mItems = new ArrayList<>();
+    private List<String> imgUrls = new ArrayList<>();
     private PreviewItemFragment.OnPagerClickListener listener;
     public PreviewPagerAdapter(FragmentManager manager, PreviewItemFragment.OnPagerClickListener listener) {
         super(manager);
@@ -24,7 +25,11 @@ public class PreviewPagerAdapter extends FragmentStatePagerAdapter {
 
     @Override
     public Fragment getItem(int position) {
-        return PreviewItemFragment.newInstance(mItems.get(position)).setOnPagerClickListener(listener);
+        if (imgUrls.size() == 0) {
+            return PreviewItemFragment.newInstance(mItems.get(position)).setOnPagerClickListener(listener);
+        }else{
+            return PreviewItemFragment.newInstance(imgUrls.get(position)).setOnPagerClickListener(listener);
+        }
     }
 
     @Override
@@ -36,6 +41,11 @@ public class PreviewPagerAdapter extends FragmentStatePagerAdapter {
         mItems.addAll(items);
         mItems.remove(null);
     }
+
+    public void addAllImgs(List<String> imgUrls){
+        this.imgUrls.addAll(imgUrls);
+    }
+
     public List<Uri> getItems(){
         return mItems;
     }

@@ -195,7 +195,7 @@ public class RecordsActivity extends ResActivity {
             this.binding = binding;
         }
 
-        public void setData(Record record) {
+        public void setData(final Record record) {
             binding.videoFlag.setVisibility(TextUtils.isEmpty(record.getVideoUrl()) ? View.GONE : View.VISIBLE);
             binding.contentTv.setText(record.getContent());
             String date = "";
@@ -223,6 +223,17 @@ public class RecordsActivity extends ResActivity {
                             .into(binding.itemImg);
                 }
             }
+
+            binding.getRoot().setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(RecordsActivity.this,RecordFullScreenActivity.class);
+                    intent.putExtra(RecordFullScreenActivity.KEY_RECORD,record);
+                    startActivity(intent);
+                }
+            });
+
+
         }
 
     }
