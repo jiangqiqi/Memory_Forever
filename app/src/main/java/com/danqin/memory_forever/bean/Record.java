@@ -2,9 +2,10 @@ package com.danqin.memory_forever.bean;
 
 import android.net.Uri;
 
+import java.io.Serializable;
 import java.util.List;
 
-public class Record {
+public class Record implements Serializable {
 
     //文字内容
     private String content;
@@ -12,29 +13,19 @@ public class Record {
     private String videoUrl;
     //图片地址
     private List<String> imgUrls;
+    //列表图片小图
+    private String smallImgUrl;
 
     private int day;
 
     private int month;
-    //做测试用
-    private int type;
 
-    private Uri videoUri;
-
-    public Uri getVideoUri() {
-        return videoUri;
+    public String getSmallImgUrl() {
+        return smallImgUrl;
     }
 
-    public void setVideoUri(Uri videoUri) {
-        this.videoUri = videoUri;
-    }
-
-    public int getType() {
-        return type;
-    }
-
-    public void setType(int type) {
-        this.type = type;
+    public void setSmallImgUrl(String smallImgUrl) {
+        this.smallImgUrl = smallImgUrl;
     }
 
     public String getContent() {

@@ -25,7 +25,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/date_tv"
             app:layout_constraintLeft_toRightOf="@+id/date_tv" />
 
-        <com.danqin.memory_forever.view.CustomImgView
+        <ImageView
             android:id="@+id/item_img"
             android:layout_width="100dp"
             android:layout_height="100dp"

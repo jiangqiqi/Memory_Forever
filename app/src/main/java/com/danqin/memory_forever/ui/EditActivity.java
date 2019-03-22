@@ -4,8 +4,15 @@ import android.app.Dialog;
 import android.content.Intent;
 import android.database.Cursor;
 import android.databinding.DataBindingUtil;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Matrix;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.media.MediaPlayer;
 import android.net.Uri;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -22,8 +29,10 @@ import android.view.ViewGroup;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.danqin.memory_forever.R;
+import com.danqin.memory_forever.bean.Record;
 import com.danqin.memory_forever.databinding.EditLayoutBinding;
 import com.danqin.memory_forever.databinding.ImgItemBinding;
+import com.danqin.memory_forever.utils.FileUtils;
 import com.danqin.memory_forever.utils.MDP_PX;
 import com.danqin.memory_forever.view.dialog.PromotionDialog;
 import com.danqin.memory_forever.view.SpacesItemDecoration;
@@ -33,8 +42,13 @@ import com.danqin.memory_forever.view.preview.PreviewPagerAdapter;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.listener.OnFragmentInteractionListener;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 
 import static android.media.CamcorderProfile.get;
 
@@ -322,6 +336,9 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
             public void onClick(Dialog dialog, boolean confirm) {
                 if (confirm) {
                     uris.remove(currentPosition);
+                    if (!uris.contains(null)) {
+                        uris.add(null);
+                    }
                     pagerAdapter.remove(currentPosition);
                     pagerAdapter.notifyDataSetChanged();
                     adapter.notifyDataSetChanged();
@@ -378,6 +395,129 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
     @Override
     public void onClick() {
 
+    }
+
+    public void publish(View view) {
+        //TODO：绘制位图保存在本地，并将该记录上传至服务器
+        Record record = new Record();
+        Calendar calendar = Calendar.getInstance();
+        record.setMonth(calendar.get(Calendar.MONTH) + 1);
+        record.setDay(calendar.get(Calendar.DAY_OF_MONTH));
+        record.setContent(binding.editContent.getText().toString());
+        if (requestCode == REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM | requestCode == REQUEST_CODE_VIDEO_CAPTURE) {
+            String videoPath = FileUtils.getFilePathByUri(this, uri);
+            record.setVideoUrl(videoPath);
+        } else {
+            uris.remove(null);
+            if (uris.size() > 1) {
+                int mWidth = MDP_PX.dip2px(100);
+                int mHeight = MDP_PX.dip2px(100);
+                Paint paint = new Paint();
+                paint.setAntiAlias(true);
+                Bitmap mBitmap = Bitmap.createBitmap(mWidth, mHeight, Bitmap.Config.ARGB_8888);
+                Canvas canvas = new Canvas(mBitmap);
+                if (uris.size() == 2) {
+                    Bitmap temp1 = BitmapFactory.decodeResource(getResources(), R.drawable.india_tanjore_market_merchant);
+                    Bitmap bitmap1 = scaleBitmap(temp1, mWidth / 2, mHeight);
+                    Rect src1 = new Rect(0, 0, bitmap1.getWidth() / 2 - 2, bitmap1.getHeight());
+                    Rect dst1 = new Rect(0, 0, mWidth / 2 - 2, mHeight);
+
+                    Bitmap temp2 = BitmapFactory.decodeResource(getResources(), R.drawable.india_pondicherry_beach);
+                    Bitmap bitmap2 = scaleBitmap(temp2, mWidth / 2, mHeight);
+                    Rect src2 = new Rect(0, 0, bitmap2.getWidth() / 2 - 2, bitmap2.getHeight());
+                    Rect dst2 = new Rect(mWidth / 2 + 2, 0, mWidth, mHeight);
+
+                    canvas.drawBitmap(bitmap1, src1, dst1, paint);
+                    canvas.drawBitmap(bitmap2, src2, dst2, paint);
+                } else if (uris.size() == 3) {
+                    Bitmap temp1 = BitmapFactory.decodeResource(getResources(), R.drawable.india_tanjore_market_merchant);
+                    Bitmap bitmap1 = scaleBitmap(temp1, mWidth / 2, mHeight);
+                    Rect src1 = new Rect(0, 0, bitmap1.getWidth() / 2 - 2, bitmap1.getHeight());
+                    Rect dst1 = new Rect(0, 0, mWidth / 2 - 2, mHeight);
+
+                    Bitmap temp2 = BitmapFactory.decodeResource(getResources(), R.drawable.india_pondicherry_beach);
+                    Bitmap bitmap2 = scaleBitmap(temp2, mWidth / 2, mHeight / 2);
+
+                    Rect src2 = new Rect(0, 0, bitmap2.getWidth(), bitmap2.getHeight());
+                    Rect dst2 = new Rect(mWidth / 2 + 2, 0, mWidth, mHeight / 2 - 2);
+
+                    Bitmap temp3 = BitmapFactory.decodeResource(getResources(), R.drawable.india_pondicherry_salt_farm);
+                    Bitmap bitmap3 = scaleBitmap(temp3, mWidth / 2, mHeight / 2);
+                    Rect src3 = new Rect(0, 0, bitmap3.getWidth(), bitmap3.getHeight());
+                    Rect dst3 = new Rect(mWidth / 2 + 2, mHeight / 2 + 2, mWidth, mHeight);
+
+                    canvas.drawBitmap(bitmap1, src1, dst1, paint);
+                    canvas.drawBitmap(bitmap2, src2, dst2, paint);
+                    canvas.drawBitmap(bitmap3, src3, dst3, paint);
+                } else if (uris.size() >= 4) {
+                    Bitmap temp1 = BitmapFactory.decodeResource(getResources(), R.drawable.india_tanjore_market_merchant);
+                    Bitmap bitmap1 = scaleBitmap(temp1, mWidth / 2, mHeight / 2);
+                    Rect src1 = new Rect(0, 0, bitmap1.getWidth(), bitmap1.getHeight());
+                    Rect dst1 = new Rect(0, 0, mWidth / 2 - 2, mHeight / 2 - 2);
+
+                    Bitmap temp2 = BitmapFactory.decodeResource(getResources(), R.drawable.india_pondicherry_beach);
+                    Bitmap bitmap2 = scaleBitmap(temp2, mWidth / 2, mHeight / 2);
+                    Rect src2 = new Rect(0, 0, bitmap2.getWidth(), bitmap2.getHeight());
+                    Rect dst2 = new Rect(mWidth / 2 + 2, 0, mWidth, mHeight / 2 - 2);
+
+                    Bitmap temp3 = BitmapFactory.decodeResource(getResources(), R.drawable.india_pondicherry_salt_farm);
+                    Bitmap bitmap3 = scaleBitmap(temp3, mWidth / 2, mHeight / 2);
+                    Rect src3 = new Rect(0, 0, bitmap3.getWidth(), bitmap3.getHeight());
+                    Rect dst3 = new Rect(0, mHeight / 2 + 2, mWidth / 2 - 2, mHeight);
+
+                    Bitmap temp4 = BitmapFactory.decodeResource(getResources(), R.drawable.india_chennai_highway);
+                    Bitmap bitmap4 = scaleBitmap(temp4, mWidth / 2, mHeight / 2);
+                    Rect src4 = new Rect(0, 0, bitmap4.getWidth(), bitmap4.getHeight());
+                    Rect dst4 = new Rect(mWidth / 2 + 2, mHeight / 2 + 2, mWidth, mHeight);
+
+                    canvas.drawBitmap(bitmap1, src1, dst1, paint);
+                    canvas.drawBitmap(bitmap2, src2, dst2, paint);
+                    canvas.drawBitmap(bitmap3, src3, dst3, paint);
+                    canvas.drawBitmap(bitmap4, src4, dst4, paint);
+                }
+                canvas.save();
+                canvas.restore();
+                File file = new File(Environment.getExternalStorageDirectory()
+                        .getPath() + "/Memory/images/" + System.currentTimeMillis() + ".png");// 保存到sdcard根目录下，文件名为share_pic.png
+                FileOutputStream fos = null;
+                try {
+                    fos = new FileOutputStream(file);
+                    mBitmap.compress(Bitmap.CompressFormat.PNG, 100, fos);
+                    record.setSmallImgUrl(file.getPath());
+                } catch (FileNotFoundException e) {
+                    e.printStackTrace();
+                } finally {
+                    try {
+                        if (fos != null) {
+                            fos.close();
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                String imgPath = FileUtils.getFilePathByUri(this, uris.get(0));
+                record.setSmallImgUrl(imgPath);
+            }
+        }
+        Intent intent = new Intent();
+        intent.putExtra(KEY_EDIT_RESULT,record);
+        setResult(RESULT_CODE,intent);
+        finish();
+    }
+
+    private Bitmap scaleBitmap(Bitmap src, int dstWidth, int dstHeight) {
+        Matrix m = new Matrix();
+
+        final int width = src.getWidth();
+        final int height = src.getHeight();
+        if (width != dstWidth || height != dstHeight) {
+            final float sx = dstWidth / (float) width;
+            final float sy = dstHeight / (float) height;
+            float scale = Math.max(sx, sy);
+            m.setScale(scale, scale);
+        }
+        return Bitmap.createBitmap(src, 0, 0, width, height, m, true);
     }
 
     private class ImageAdapter extends RecyclerView.Adapter<ImageHoder> {

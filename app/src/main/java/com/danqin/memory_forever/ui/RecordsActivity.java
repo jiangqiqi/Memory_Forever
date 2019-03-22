@@ -53,12 +53,8 @@ public class RecordsActivity extends ResActivity {
         Module module = (Module) getIntent().getSerializableExtra(MainActivity.KEY_MODULE);
         binding.topLayout.moduleName.setText(module.getName());
         initArcMenu();
-        binding.recordRecycler.setLayoutManager(new LinearLayoutManager(this,LinearLayoutManager.VERTICAL,false));
+        binding.recordRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         binding.recordRecycler.setAdapter(adapter = new RecordAdapter());
-//        binding.customImg1.setType(1);
-//        binding.customImg2.setType(2);
-//        binding.customImg3.setType(3);
-//        binding.customImg4.setType(4);
     }
 
     @Override
@@ -72,19 +68,12 @@ public class RecordsActivity extends ResActivity {
         if (!videoDir.exists()) {
             videoDir.mkdirs();
         }
-
-
         records = new ArrayList<>();
-        for (int i = 0; i < 20; i++) {
+        for (int i = 0; i < 5; i++) {
             Record record = new Record();
             record.setContent(s);
             record.setDay(i + 1);
             record.setMonth(3);
-            record.setType(i + 1);
-            if (i % 3 == 0) {
-                Uri uri = Uri.parse("/external/video/media/669270");
-                record.setVideoUri(uri);
-            }
             records.add(record);
         }
         adapter.notifyDataSetChanged();
@@ -135,6 +124,14 @@ public class RecordsActivity extends ResActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        Log.e(tag, "result code is : " + resultCode);
+        if (resultCode == RESULT_CODE) {
+            Record record = (Record) data.getSerializableExtra(KEY_EDIT_RESULT);
+            records.add(0, record);
+            adapter.notifyDataSetChanged();
+            return;
+        }
+
         Intent intent = new Intent(this, EditActivity.class);
         if (data == null) {
             if (!isCaptureImg) {
@@ -146,6 +143,7 @@ public class RecordsActivity extends ResActivity {
             }
             isCaptureImg = false;
         }
+
         switch (requestCode) {
             case REQUEST_CODE_IMAGE_CAPTURE:
                 intent.putExtra(KEY_REQUEST_CODE, REQUEST_CODE_IMAGE_CAPTURE);
@@ -167,8 +165,7 @@ public class RecordsActivity extends ResActivity {
                 intent.putExtra(KEY_REQUEST_CODE, REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM);
                 break;
         }
-        startActivity(intent);
-
+        startActivityForResult(intent, ACTIVITY_REQUEST_CODE);
     }
 
     private class RecordAdapter extends RecyclerView.Adapter<RecordHolder> {
@@ -211,14 +208,21 @@ public class RecordsActivity extends ResActivity {
             binding.dateTv.setText(date);
             binding.monthTv.setText(record.getMonth() + "月");
             //TODO:根据uri设置图片
-//            if (record.getVideoUri() != null) {
-//                Log.e("JiangLiang","videoUri is : " + record.getVideoUri());
-//                Glide.with(RecordsActivity.this)
-//                        .load(record.getVideoUri())
-//                        .into(binding.itemImg);
-//            } else {
-                binding.itemImg.setType(record.getType());
-//            }
+            if (record.getVideoUrl() != null) {
+                Glide.with(RecordsActivity.this)
+                        .load(record.getVideoUrl())
+                        .into(binding.itemImg);
+            } else {
+                if (TextUtils.isEmpty(record.getSmallImgUrl())) {
+                    Glide.with(RecordsActivity.this)
+                            .load(R.drawable.india_thanjavur_market)
+                            .into(binding.itemImg);
+                } else {
+                    Glide.with(RecordsActivity.this)
+                            .load(record.getSmallImgUrl())
+                            .into(binding.itemImg);
+                }
+            }
         }
 
     }

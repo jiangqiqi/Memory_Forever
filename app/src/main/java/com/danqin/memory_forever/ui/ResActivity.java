@@ -19,10 +19,12 @@ public abstract class ResActivity extends BaseActivity {
     public static final int REQUEST_CODE_IMAGE_SELECT_FROM_PHOTO_ALBUM = 10002;
     public static final int REQUEST_CODE_VIDEO_SELECT_FROM_PHOTO_ALBUM = 10003;
     public static final int REQUEST_CODE_ONLY_TEXT = 10004;
+    public static final int ACTIVITY_REQUEST_CODE = 10005;
+    public static final int RESULT_CODE = 20000;
     public static final String KEY_REQUEST_CODE = "requestCode";
     public static final String KEY_RESOURCE_URI = "resourceUri";
     public static final String KEY_RESOURCE_URIS = "resourceUris";
-
+    public static final String KEY_EDIT_RESULT = "edit_result";
     protected void selectVideoFromPhotoAlbum() {
         Matisse.from(this)
                 .choose(MimeType.ofVideo())
