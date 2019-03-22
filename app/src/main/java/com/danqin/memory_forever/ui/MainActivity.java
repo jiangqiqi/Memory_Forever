@@ -112,9 +112,15 @@ public class MainActivity extends Activity implements AddModuleDialog.OnConfirmL
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(MainActivity.this, RecordsActivity.class);
-                    intent.putExtra(KEY_MODULE,module);
-                    startActivity(intent);
+                    if (module.getType() == 1) {
+                        Intent intent = new Intent(MainActivity.this, GreetsActivity.class);
+                        intent.putExtra(KEY_MODULE, module);
+                        startActivity(intent);
+                    }else{
+                        Intent intent = new Intent(MainActivity.this,RecordsActivity.class);
+                        intent.putExtra(KEY_MODULE,module);
+                        startActivity(intent);
+                    }
                 }
             });
             binding.moduleDelete.setOnClickListener(new View.OnClickListener() {
