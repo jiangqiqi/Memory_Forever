@@ -499,6 +499,7 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
                 String imgPath = FileUtils.getFilePathByUri(this, uris.get(0));
                 record.setSmallImgUrl(imgPath);
             }
+            record.setUris(uris);
         }
         Intent intent = new Intent();
         intent.putExtra(KEY_EDIT_RESULT,record);

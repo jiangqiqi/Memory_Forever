@@ -3,6 +3,7 @@ package com.danqin.memory_forever.ui;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.text.TextUtils;
 import android.view.View;
 
@@ -43,16 +44,22 @@ public class RecordFullScreenActivity extends BaseActivity {
     protected void loadData() {
         super.loadData();
         Intent intent = getIntent();
-        Record record = (Record) intent.getSerializableExtra(KEY_RECORD);
+        Record record = intent.getParcelableExtra(KEY_RECORD);
         String videoUrl = record.getVideoUrl();
         if (!TextUtils.isEmpty(videoUrl)) {
             binding.viewpager.setVisibility(View.GONE);
             playVideo(videoUrl);
         }
-        List<String> imgUrls = record.getImgUrls();
-        if (imgUrls != null) {
+//        List<String> imgUrls = record.getImgUrls();
+//        if (imgUrls != null) {
+//            binding.fullScreenPlay.setVisibility(View.GONE);
+//            pagerAdapter.addAllImgs(imgUrls);
+//            pagerAdapter.notifyDataSetChanged();
+//        }
+        List<Uri> uris = record.getUris();
+        if (uris!=null){
             binding.fullScreenPlay.setVisibility(View.GONE);
-            pagerAdapter.addAllImgs(imgUrls);
+            pagerAdapter.addAll(uris);
             pagerAdapter.notifyDataSetChanged();
         }
         binding.content.setText(record.getContent());

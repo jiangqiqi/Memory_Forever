@@ -126,7 +126,7 @@ public class RecordsActivity extends ResActivity {
         super.onActivityResult(requestCode, resultCode, data);
         Log.e(tag, "result code is : " + resultCode);
         if (resultCode == RESULT_CODE) {
-            Record record = (Record) data.getSerializableExtra(KEY_EDIT_RESULT);
+            Record record = data.getParcelableExtra(KEY_EDIT_RESULT);
             records.add(0, record);
             adapter.notifyDataSetChanged();
             return;
