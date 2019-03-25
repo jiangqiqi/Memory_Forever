@@ -5,7 +5,10 @@ import android.databinding.DataBindingUtil;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
+import android.view.animation.AccelerateDecelerateInterpolator;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.danqin.memory_forever.R;
 import com.danqin.memory_forever.databinding.ActivitySplashBinding;
 import com.danqin.memory_forever.utils.SpUtil;
@@ -19,7 +22,47 @@ public class SplashActivity extends AppCompatActivity {
         if (SpUtil.isLogined()){
             binding.loginByWeixin.setVisibility(View.INVISIBLE);
         }
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        YoYo.with(Techniques.SlideInLeft)
+                .duration(1500)
+                .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
+                .interpolate(new AccelerateDecelerateInterpolator())
+                .playOn(binding.text1);
+        YoYo.with(Techniques.SlideInLeft)
+                .duration(1500)
+                .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
+                .interpolate(new AccelerateDecelerateInterpolator())
+                .playOn(binding.text3);
+        YoYo.with(Techniques.SlideInRight)
+                .duration(1500)
+                .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
+                .interpolate(new AccelerateDecelerateInterpolator())
+                .playOn(binding.text2);
+        YoYo.with(Techniques.SlideInRight)
+                .duration(1500)
+                .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
+                .interpolate(new AccelerateDecelerateInterpolator())
+                .playOn(binding.text4);
+        YoYo.with(Techniques.SlideInDown)
+                .duration(1500)
+                .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
+                .interpolate(new AccelerateDecelerateInterpolator())
+                .playOn(binding.text5);
+        YoYo.with(Techniques.SlideInUp)
+                .duration(1500)
+                .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
+                .interpolate(new AccelerateDecelerateInterpolator())
+                .playOn(binding.loginByWeixin);
     }
 
     public void login(View view) {
