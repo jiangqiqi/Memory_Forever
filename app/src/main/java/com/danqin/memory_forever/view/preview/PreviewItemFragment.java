@@ -71,14 +71,14 @@ public class PreviewItemFragment extends Fragment implements View.OnClickListene
         if (uri != null) {
             Glide.with(getContext())
                     .load(uri)
-                    .centerCrop()
+                    .fitCenter()
                     .into(binding.imageView);
         }
         imgUrl = getArguments().getString(ARGS_URL);
         if (imgUrl != null) {
             Glide.with(getContext())
                     .load(imgUrl)
-                    .centerCrop()
+                    .fitCenter()
                     .into(binding.imageView);
         }
     }
