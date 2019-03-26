@@ -94,6 +94,11 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
         pagerAdapter = new PreviewPagerAdapter(getSupportFragmentManager(), pagerClickListener);
         binding.previewViewpager.setAdapter(pagerAdapter);
         binding.previewViewpager.addOnPageChangeListener(this);
+        if (uri != null | uris.size() > 0) {
+            binding.publishContent.setEnabled(true);
+        } else {
+            binding.publishContent.setEnabled(false);
+        }
     }
 
     private PreviewItemFragment.OnPagerClickListener pagerClickListener = new PreviewItemFragment.OnPagerClickListener() {
@@ -155,6 +160,7 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
             case REQUEST_CODE_ONLY_TEXT:
                 break;
         }
+        binding.publishContent.setEnabled(true);
     }
 
     @Override
@@ -344,6 +350,7 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
                     adapter.notifyDataSetChanged();
                     if (pagerAdapter.getItems().size() == 0) {
                         binding.fullScreenImageLayout.setVisibility(View.GONE);
+                        disenablePublish();
                     }
                     binding.imagePosition.setText((currentPosition + 1) + "/" + pagerAdapter.getItems().size());
                 }
@@ -361,10 +368,17 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
                     uri = null;
                     binding.videoLayout.setVisibility(View.GONE);
                     binding.imgAdd.setVisibility(View.VISIBLE);
+                    disenablePublish();
                 }
             }
         }).setTitle(getString(R.string.promotion)).show();
 
+    }
+
+    private void disenablePublish() {
+        if (null == binding.editContent.getText()) {
+            binding.publishContent.setEnabled(false);
+        }
     }
 
     private void showSelectDialog() {
@@ -502,8 +516,8 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
             record.setUris(uris);
         }
         Intent intent = new Intent();
-        intent.putExtra(KEY_EDIT_RESULT,record);
-        setResult(RESULT_CODE,intent);
+        intent.putExtra(KEY_EDIT_RESULT, record);
+        setResult(RESULT_CODE, intent);
         finish();
     }
 

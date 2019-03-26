@@ -30,7 +30,7 @@
         <activity android:name=".ui.MainActivity"/>
         <activity android:name=".ui.GreetsActivity" />
         <activity android:name=".ui.RecordsActivity" />
-        <activity android:name=".ui.EditActivity" />
+        <activity android:name=".ui.EditActivity" android:windowSoftInputMode="stateHidden"/>
         <activity android:name=".ui.RecordFullScreenActivity" />
     </application>
 
