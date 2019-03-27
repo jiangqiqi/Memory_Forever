@@ -50,7 +50,7 @@ public class RecordsActivity extends ResActivity {
             StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
             StrictMode.setVmPolicy(builder.build());
         }
-        Module module = (Module) getIntent().getSerializableExtra(MainActivity.KEY_MODULE);
+        Module module = getIntent().getParcelableExtra(MainActivity.KEY_MODULE);
         binding.topLayout.moduleName.setText(module.getName());
         initArcMenu();
         binding.recordRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));

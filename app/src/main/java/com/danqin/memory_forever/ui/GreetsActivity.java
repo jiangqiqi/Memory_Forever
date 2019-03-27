@@ -47,7 +47,7 @@ public class GreetsActivity extends BaseActivity {
 
     @Override
     protected void initView() {
-        module = (Module) getIntent().getSerializableExtra(MainActivity.KEY_MODULE);
+        module = getIntent().getParcelableExtra(MainActivity.KEY_MODULE);
         binding.topLayout.moduleName.setText(module.getName());
         binding.greetsRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         binding.greetsRecycler.setAdapter(adapter = new GreetAdapter());
