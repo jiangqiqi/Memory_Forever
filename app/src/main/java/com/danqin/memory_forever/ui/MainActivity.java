@@ -74,11 +74,6 @@ public class MainActivity extends Activity implements AddModuleDialog.OnAddModul
         addModuleDialog.show();
     }
 
-    public void edit(View view) {
-        isEditting = !isEditting;
-        adapter.notifyDataSetChanged();
-    }
-
     @Override
     public void confirm(Module module) {
         //TODO:将新添模块上传至服务器
