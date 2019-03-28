@@ -38,7 +38,7 @@ public class AddModuleDialog extends Dialog {
         this.coverUri = coverUri;
         Glide.with(getContext())
                 .load(coverUri)
-                .override(MDP_PX.dip2px(100),MDP_PX.dip2px(140))
+                .override(MDP_PX.dip2px(100), MDP_PX.dip2px(140))
                 .centerCrop()
                 .into(binding.coverImg);
     }
@@ -61,7 +61,7 @@ public class AddModuleDialog extends Dialog {
         binding.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
-                switch (checkedId){
+                switch (checkedId) {
                     case R.id.record_rb:
                         type = RECORD_TYPE;
                         break;
@@ -89,7 +89,7 @@ public class AddModuleDialog extends Dialog {
                     return;
                 }
 
-                if (!flag){
+                if (!flag && type != RECORD_TYPE) {
                     listener.showPayUi();
                     return;
                 }
@@ -116,7 +116,7 @@ public class AddModuleDialog extends Dialog {
         });
     }
 
-    public void confirm(){
+    public void confirm() {
         if (listener != null) {
             String name = binding.editModuleName.getText().toString().trim();
             Module module = new Module();
@@ -136,7 +136,9 @@ public class AddModuleDialog extends Dialog {
 
     public interface OnAddModuleListener {
         void confirm(Module module);
+
         void selectCover();
+
         void showPayUi();
     }
 

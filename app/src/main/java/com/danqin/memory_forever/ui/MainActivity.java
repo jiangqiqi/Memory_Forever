@@ -2,6 +2,7 @@ package com.danqin.memory_forever.ui;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
@@ -20,6 +21,7 @@ import com.danqin.memory_forever.databinding.ActivityMainBinding;
 import com.danqin.memory_forever.databinding.ModuleItemBinding;
 import com.danqin.memory_forever.utils.Glide4Engine;
 import com.danqin.memory_forever.view.dialog.AddModuleDialog;
+import com.danqin.memory_forever.view.dialog.PromotionDialog;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 
@@ -98,23 +100,16 @@ public class MainActivity extends Activity implements AddModuleDialog.OnAddModul
 
     @Override
     public void showPayUi() {
-        //TODO:
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("赠言功能是付费服务，确定购买吗？");
-        builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
+        new PromotionDialog(this, R.style.dialog, getString(R.string.confirm_buy), new PromotionDialog.OnCloseListener(){
+
             @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-                addModuleDialog.confirm();
-            }
-        });
-        builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
+            public void onClick(Dialog dialog, boolean confirm) {
+                if (confirm){
+                    addModuleDialog.confirm();
+                }
                 dialog.dismiss();
             }
-        });
-        builder.show();
+        }).show();
     }
 
     @Override
