@@ -592,9 +592,4 @@ public class EditActivity extends ResActivity implements ViewPager.OnPageChangeL
 
     }
 
-    private void showImageDialog() {
-
-    }
-
-
 }

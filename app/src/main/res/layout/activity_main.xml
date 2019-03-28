@@ -28,7 +28,7 @@
                 android:layout_gravity="end|center_vertical"
                 android:layout_marginRight="20dp"
                 android:onClick="edit"
-                android:src="@android:drawable/ic_menu_edit" />
+                android:src="@drawable/icon_more" />
         </FrameLayout>
 
         <android.support.v7.widget.RecyclerView

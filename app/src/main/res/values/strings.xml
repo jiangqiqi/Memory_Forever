@@ -18,4 +18,9 @@
     <string name="confirm_buy">赠言功能是付费服务，确定购买吗？</string>
     <string name="capture">拍摄</string>
     <string name="select_from_photo">从相册选择</string>
+    <string name="confirm_delete_module">确定要删除该部分吗？</string>
+    <string name="edit">编辑</string>
+    <string name="delete">删除</string>
+    <string name="please_input_name">请输入名称</string>
+    <string name="please_set_cover">请设置封面图片</string>
 </resources>

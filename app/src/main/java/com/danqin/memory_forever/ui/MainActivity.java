@@ -21,14 +21,16 @@ import com.danqin.memory_forever.databinding.ActivityMainBinding;
 import com.danqin.memory_forever.databinding.ModuleItemBinding;
 import com.danqin.memory_forever.utils.Glide4Engine;
 import com.danqin.memory_forever.view.dialog.AddModuleDialog;
+import com.danqin.memory_forever.view.dialog.MoreDialog;
 import com.danqin.memory_forever.view.dialog.PromotionDialog;
+import com.danqin.memory_forever.view.dialog.SelectDialog;
 import com.zhihu.matisse.Matisse;
 import com.zhihu.matisse.MimeType;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity implements AddModuleDialog.OnAddModuleListener {
+public class MainActivity extends Activity implements AddModuleDialog.OnAddModuleListener, MoreDialog.OnMoreListener {
     private ActivityMainBinding binding;
     private List<Module> modules;
     private boolean isEditting;
@@ -80,7 +82,7 @@ public class MainActivity extends Activity implements AddModuleDialog.OnAddModul
     @Override
     public void confirm(Module module) {
         //TODO:将新添模块上传至服务器
-        modules.add(0,module);
+        modules.add(0, module);
         adapter.notifyDataSetChanged();
     }
 
@@ -100,11 +102,11 @@ public class MainActivity extends Activity implements AddModuleDialog.OnAddModul
 
     @Override
     public void showPayUi() {
-        new PromotionDialog(this, R.style.dialog, getString(R.string.confirm_buy), new PromotionDialog.OnCloseListener(){
+        new PromotionDialog(this, R.style.dialog, getString(R.string.confirm_buy), new PromotionDialog.OnCloseListener() {
 
             @Override
             public void onClick(Dialog dialog, boolean confirm) {
-                if (confirm){
+                if (confirm) {
                     addModuleDialog.confirm();
                 }
                 dialog.dismiss();
@@ -122,6 +124,31 @@ public class MainActivity extends Activity implements AddModuleDialog.OnAddModul
             Uri coverUri = Matisse.obtainResult(data).get(0);
             addModuleDialog.setCoverUri(coverUri);
         }
+    }
+
+    private void showMoreDialog() {
+        new MoreDialog(MainActivity.this).setOnMoreListener(this).show();
+    }
+
+    @Override
+    public void editModule() {
+
+    }
+
+    private Module currentModule;
+
+    @Override
+    public void deleteModule() {
+        new PromotionDialog(MainActivity.this, R.style.dialog, getString(R.string.confirm_delete_module), new PromotionDialog.OnCloseListener() {
+            @Override
+            public void onClick(Dialog dialog, boolean confirm) {
+                if (confirm) {
+                    modules.remove(currentModule);
+                    adapter.notifyDataSetChanged();
+                }
+                dialog.dismiss();
+            }
+        }).show();
     }
 
     private class ModuleAdapter extends RecyclerView.Adapter<ModuleHolder> {
@@ -154,11 +181,11 @@ public class MainActivity extends Activity implements AddModuleDialog.OnAddModul
         public void setItem(final Module module) {
             if (module.getCoverUri() == null) {
                 binding.moduleImg.setImageResource(module.getImageRes());
-            }else{
+            } else {
                 binding.moduleImg.setImageURI(module.getCoverUri());
             }
             binding.moduleName.setText(module.getName());
-            binding.moduleDelete.setVisibility(isEditting ? View.VISIBLE : View.GONE);
+//            binding.moduleDelete.setVisibility(isEditting ? View.VISIBLE : View.GONE);
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -176,23 +203,8 @@ public class MainActivity extends Activity implements AddModuleDialog.OnAddModul
             binding.moduleDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    final AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
-                    builder.setTitle("注意");
-                    builder.setMessage("确定要删除该模块吗？");
-                    builder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            modules.remove(module);
-                            adapter.notifyDataSetChanged();
-                        }
-                    });
-                    builder.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            dialog.dismiss();
-                        }
-                    });
-                    builder.show();
+                    currentModule = module;
+                    showMoreDialog();
                 }
             });
         }

@@ -49,7 +49,6 @@ public class AddModuleDialog extends Dialog {
         binding = DataBindingUtil.inflate(LayoutInflater.from(getContext()), R.layout.add_module_dialog, null, false);
         setContentView(binding.getRoot());
         setCanceledOnTouchOutside(false);
-        binding.giftRb.setText("赠言(付费)");
         binding.cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -77,7 +76,7 @@ public class AddModuleDialog extends Dialog {
             public void onClick(View v) {
                 String name = binding.editModuleName.getText().toString().trim();
                 if (TextUtils.isEmpty(name)) {
-                    Toast.makeText(getContext(), "请输入名称", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getContext().getString(R.string.please_input_name), Toast.LENGTH_SHORT).show();
                     YoYo.with(Techniques.Bounce)
                             .duration(1200)
                             .playOn(binding.editModuleName);
@@ -85,7 +84,7 @@ public class AddModuleDialog extends Dialog {
                 }
 
                 if (coverUri == null) {
-                    Toast.makeText(getContext(), "请设置封面图片", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getContext(), getContext().getString(R.string.please_set_cover), Toast.LENGTH_SHORT).show();
                     return;
                 }
 
