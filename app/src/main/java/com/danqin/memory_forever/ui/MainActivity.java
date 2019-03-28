@@ -115,6 +115,12 @@ public class MainActivity extends Activity implements AddModuleDialog.OnAddModul
     }
 
     @Override
+    public void edit(Module module) {
+        modules.set(currentPosition,module);
+        adapter.notifyDataSetChanged();
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (data == null) {
@@ -132,10 +138,13 @@ public class MainActivity extends Activity implements AddModuleDialog.OnAddModul
 
     @Override
     public void editModule() {
-
+        addModuleDialog = new AddModuleDialog(this);
+        addModuleDialog.setOnConfirmListener(this);
+        addModuleDialog.setModule(modules.get(currentPosition));
+        addModuleDialog.show();
     }
 
-    private Module currentModule;
+    private int currentPosition;
 
     @Override
     public void deleteModule() {
@@ -143,7 +152,7 @@ public class MainActivity extends Activity implements AddModuleDialog.OnAddModul
             @Override
             public void onClick(Dialog dialog, boolean confirm) {
                 if (confirm) {
-                    modules.remove(currentModule);
+                    modules.remove(currentPosition);
                     adapter.notifyDataSetChanged();
                 }
                 dialog.dismiss();
@@ -161,7 +170,7 @@ public class MainActivity extends Activity implements AddModuleDialog.OnAddModul
 
         @Override
         public void onBindViewHolder(@NonNull ModuleHolder moduleHolder, int i) {
-            moduleHolder.setItem(modules.get(i));
+            moduleHolder.setItem(i);
         }
 
         @Override
@@ -178,14 +187,14 @@ public class MainActivity extends Activity implements AddModuleDialog.OnAddModul
             this.binding = binding;
         }
 
-        public void setItem(final Module module) {
+        public void setItem(final int position) {
+            final Module module = modules.get(position);
             if (module.getCoverUri() == null) {
                 binding.moduleImg.setImageResource(module.getImageRes());
             } else {
                 binding.moduleImg.setImageURI(module.getCoverUri());
             }
             binding.moduleName.setText(module.getName());
-//            binding.moduleDelete.setVisibility(isEditting ? View.VISIBLE : View.GONE);
             binding.getRoot().setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -203,7 +212,7 @@ public class MainActivity extends Activity implements AddModuleDialog.OnAddModul
             binding.moduleDelete.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    currentModule = module;
+                    currentPosition = position;
                     showMoreDialog();
                 }
             });

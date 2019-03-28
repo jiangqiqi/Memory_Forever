@@ -6,6 +6,7 @@ import android.databinding.DataBindingUtil;
 import android.net.Uri;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.RadioGroup;
@@ -28,6 +29,7 @@ public class AddModuleDialog extends Dialog {
     private Uri coverUri;
     private int type = GIFT_TYPE;
     private boolean flag;
+    private Module module;
 
     public AddModuleDialog(Context context) {
         super(context, R.style.MyDialog);
@@ -36,12 +38,18 @@ public class AddModuleDialog extends Dialog {
 
     public void setCoverUri(Uri coverUri) {
         this.coverUri = coverUri;
-        Glide.with(getContext())
+        Log.e("JiangLiang","Uri is : " + coverUri);
+        Glide.with(getContext().getApplicationContext())
                 .load(coverUri)
                 .override(MDP_PX.dip2px(100), MDP_PX.dip2px(140))
                 .centerCrop()
                 .into(binding.coverImg);
     }
+
+    public void setModule(Module module) {
+        this.module = module;
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +79,21 @@ public class AddModuleDialog extends Dialog {
             }
         });
 
+        if (module != null) {
+            coverUri = module.getCoverUri();
+            type = module.getType();
+            binding.editModuleName.setText(module.getName());
+            Glide.with(getContext())
+                    .load(coverUri)
+                    .override(MDP_PX.dip2px(100), MDP_PX.dip2px(140))
+                    .centerCrop()
+                    .into(binding.coverImg);
+            if (type == RECORD_TYPE) {
+                binding.recordRb.setChecked(true);
+            }
+        }
+
+
         binding.confirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -93,13 +116,20 @@ public class AddModuleDialog extends Dialog {
                     return;
                 }
 
-                if (listener != null) {
-                    Module module = new Module();
+                if (module != null) {
+                    module.setCoverUri(coverUri);
                     module.setType(type);
                     module.setName(name);
-                    module.setImageRes(R.drawable.india_pondicherry_fisherman);
-                    module.setCoverUri(coverUri);
-                    listener.confirm(module);
+                    listener.edit(module);
+                }else {
+                    if (listener != null) {
+                        Module module = new Module();
+                        module.setType(type);
+                        module.setName(name);
+                        module.setImageRes(R.drawable.india_pondicherry_fisherman);
+                        module.setCoverUri(coverUri);
+                        listener.confirm(module);
+                    }
                 }
                 dismiss();
             }
@@ -139,6 +169,8 @@ public class AddModuleDialog extends Dialog {
         void selectCover();
 
         void showPayUi();
+
+        void edit(Module module);
     }
 
 }

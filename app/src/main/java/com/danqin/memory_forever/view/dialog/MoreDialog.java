@@ -27,10 +27,10 @@ public class MoreDialog extends Dialog implements View.OnClickListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.select_dialog);
+        setContentView(R.layout.more_dialog);
         setCanceledOnTouchOutside(true);
-        findViewById(R.id.capture).setOnClickListener(this);
-        findViewById(R.id.select_from_photo).setOnClickListener(this);
+        findViewById(R.id.edit).setOnClickListener(this);
+        findViewById(R.id.delete).setOnClickListener(this);
     }
 
     public MoreDialog setOnMoreListener(OnMoreListener listener) {
