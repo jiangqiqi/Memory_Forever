@@ -83,11 +83,20 @@ public class AddModuleDialog extends Dialog {
             coverUri = module.getCoverUri();
             type = module.getType();
             binding.editModuleName.setText(module.getName());
-            Glide.with(getContext())
-                    .load(coverUri)
-                    .override(MDP_PX.dip2px(100), MDP_PX.dip2px(140))
-                    .centerCrop()
-                    .into(binding.coverImg);
+            binding.title.setText(getContext().getText(R.string.edit_module));
+            if (coverUri!=null) {
+                Glide.with(getContext())
+                        .load(coverUri)
+                        .override(MDP_PX.dip2px(100), MDP_PX.dip2px(140))
+                        .centerCrop()
+                        .into(binding.coverImg);
+            }else{
+                Glide.with(getContext())
+                        .load(module.getImageRes())
+                        .override(MDP_PX.dip2px(100), MDP_PX.dip2px(140))
+                        .centerCrop()
+                        .into(binding.coverImg);
+            }
             if (type == RECORD_TYPE) {
                 binding.recordRb.setChecked(true);
             }

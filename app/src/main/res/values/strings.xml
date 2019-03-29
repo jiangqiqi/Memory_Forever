@@ -3,6 +3,7 @@
     <string name="login_weixin">微信登录</string>
     <string name="memory_forever">记忆永恒</string>
     <string name="create_module">创建模块</string>
+    <string name="edit_module">编辑模块</string>
     <string name="type_selector">类型选择：</string>
     <string name="zengyan">赠言</string>
     <string name="record">记录</string>

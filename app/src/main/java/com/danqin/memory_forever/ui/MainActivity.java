@@ -33,7 +33,6 @@ import java.util.List;
 public class MainActivity extends Activity implements AddModuleDialog.OnAddModuleListener, MoreDialog.OnMoreListener {
     private ActivityMainBinding binding;
     private List<Module> modules;
-    private boolean isEditting;
     private ModuleAdapter adapter;
     public static final String KEY_MODULE = "module";
 
