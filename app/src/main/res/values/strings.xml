@@ -24,4 +24,13 @@
     <string name="delete">删除</string>
     <string name="please_input_name">请输入名称</string>
     <string name="please_set_cover">请设置封面图片</string>
+    <string name="user_name">昵称:null</string>
+    <string name="extend_num">推广人数：10</string>
+    <string name="extend_money">推广费：5000.50</string>
+    <string name="withdraw_enable">可提现：4000.00</string>
+    <string name="withdrawed">已提现：1000.00</string>
+    <string name="extend_earn_money">推广赚钱</string>
+    <string name="alipay_num">支付宝账号:</string>
+    <string name="bind">绑定</string>
+    <string name="withdraw">提现</string>
 </resources>

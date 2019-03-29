@@ -15,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.daimajia.androidanimations.library.Techniques;
+import com.daimajia.androidanimations.library.YoYo;
 import com.danqin.memory_forever.R;
 import com.danqin.memory_forever.bean.Module;
 import com.danqin.memory_forever.databinding.ActivityMainBinding;
@@ -152,6 +154,21 @@ public class MainActivity extends Activity implements AddModuleDialog.OnAddModul
                 dialog.dismiss();
             }
         }).show();
+    }
+
+    public void showSlideLayout(View view) {
+        YoYo.with(Techniques.SlideInLeft)
+                .duration(600)
+                .playOn(binding.slideLayout);
+        binding.slideLayout.setVisibility(View.VISIBLE);
+        binding.fab.setVisibility(View.GONE);
+    }
+
+    public void hideSlideLayout(View view) {
+        YoYo.with(Techniques.SlideOutLeft)
+                .duration(600)
+                .playOn(binding.slideLayout);
+        binding.fab.setVisibility(View.VISIBLE);
     }
 
     private class ModuleAdapter extends RecyclerView.Adapter<ModuleHolder> {
