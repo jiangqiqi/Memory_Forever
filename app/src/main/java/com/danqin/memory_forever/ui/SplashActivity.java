@@ -11,6 +11,7 @@ import com.daimajia.androidanimations.library.Techniques;
 import com.daimajia.androidanimations.library.YoYo;
 import com.danqin.memory_forever.R;
 import com.danqin.memory_forever.databinding.ActivitySplashBinding;
+import com.danqin.memory_forever.utils.Commons;
 import com.danqin.memory_forever.utils.SpUtil;
 
 public class SplashActivity extends AppCompatActivity {
@@ -37,38 +38,22 @@ public class SplashActivity extends AppCompatActivity {
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
         if (!flag) {
-            YoYo.with(Techniques.SlideInLeft)
-                    .duration(1500)
-                    .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
-                    .interpolate(new AccelerateDecelerateInterpolator())
-                    .playOn(binding.text1);
-            YoYo.with(Techniques.SlideInLeft)
-                    .duration(1500)
-                    .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
-                    .interpolate(new AccelerateDecelerateInterpolator())
-                    .playOn(binding.text3);
-            YoYo.with(Techniques.SlideInRight)
-                    .duration(1500)
-                    .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
-                    .interpolate(new AccelerateDecelerateInterpolator())
-                    .playOn(binding.text2);
-            YoYo.with(Techniques.SlideInRight)
-                    .duration(1500)
-                    .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
-                    .interpolate(new AccelerateDecelerateInterpolator())
-                    .playOn(binding.text4);
-            YoYo.with(Techniques.SlideInDown)
-                    .duration(1500)
-                    .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
-                    .interpolate(new AccelerateDecelerateInterpolator())
-                    .playOn(binding.text5);
-            YoYo.with(Techniques.SlideInUp)
-                    .duration(1500)
-                    .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
-                    .interpolate(new AccelerateDecelerateInterpolator())
-                    .playOn(binding.loginByWeixin);
+            animate(Techniques.SlideInLeft,binding.text1);
+            animate(Techniques.SlideInLeft,binding.text3);
+            animate(Techniques.SlideInRight,binding.text2);
+            animate(Techniques.SlideInRight,binding.text4);
+            animate(Techniques.SlideInDown,binding.text5);
+            animate(Techniques.SlideInUp,binding.loginByWeixin);
             flag = true;
         }
+    }
+
+    private void animate(Techniques techniques,View target){
+        YoYo.with(techniques)
+                .duration(Commons.ANIMATION_DURATION)
+                .pivot(YoYo.CENTER_PIVOT, YoYo.CENTER_PIVOT)
+                .interpolate(new AccelerateDecelerateInterpolator())
+                .playOn(target);
     }
 
     public void login(View view) {
