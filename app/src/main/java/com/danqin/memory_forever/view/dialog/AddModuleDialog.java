@@ -18,6 +18,7 @@ import com.daimajia.androidanimations.library.YoYo;
 import com.danqin.memory_forever.R;
 import com.danqin.memory_forever.bean.Module;
 import com.danqin.memory_forever.databinding.AddModuleDialogBinding;
+import com.danqin.memory_forever.utils.Commons;
 import com.danqin.memory_forever.utils.MDP_PX;
 
 public class AddModuleDialog extends Dialog {
@@ -109,8 +110,8 @@ public class AddModuleDialog extends Dialog {
                 String name = binding.editModuleName.getText().toString().trim();
                 if (TextUtils.isEmpty(name)) {
                     Toast.makeText(getContext(), getContext().getString(R.string.please_input_name), Toast.LENGTH_SHORT).show();
-                    YoYo.with(Techniques.Bounce)
-                            .duration(1200)
+                    YoYo.with(Techniques.Shake)
+                            .duration(Commons.ANIMATION_DURATION)
                             .playOn(binding.editModuleName);
                     return;
                 }

@@ -11,6 +11,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,7 +22,9 @@ import com.danqin.memory_forever.R;
 import com.danqin.memory_forever.bean.Module;
 import com.danqin.memory_forever.databinding.ActivityMainBinding;
 import com.danqin.memory_forever.databinding.ModuleItemBinding;
+import com.danqin.memory_forever.utils.Commons;
 import com.danqin.memory_forever.utils.Glide4Engine;
+import com.danqin.memory_forever.utils.SpUtil;
 import com.danqin.memory_forever.view.dialog.AddModuleDialog;
 import com.danqin.memory_forever.view.dialog.MoreDialog;
 import com.danqin.memory_forever.view.dialog.PromotionDialog;
@@ -32,24 +35,31 @@ import com.zhihu.matisse.MimeType;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends Activity implements AddModuleDialog.OnAddModuleListener, MoreDialog.OnMoreListener {
+public class MainActivity extends BaseActivity implements AddModuleDialog.OnAddModuleListener, MoreDialog.OnMoreListener {
     private ActivityMainBinding binding;
     private List<Module> modules;
     private ModuleAdapter adapter;
     public static final String KEY_MODULE = "module";
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    protected void setContentView() {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main);
-
-        binding.moduleRecycler.setLayoutManager(new GridLayoutManager(this, 2));
-        binding.moduleRecycler.setAdapter(adapter = new ModuleAdapter());
-
-        loadData();
     }
 
-    private void loadData() {
+    @Override
+    protected void initView() {
+        super.initView();
+        binding.moduleRecycler.setLayoutManager(new GridLayoutManager(this, 2));
+        binding.moduleRecycler.setAdapter(adapter = new ModuleAdapter());
+        String alipayNumber = SpUtil.getAlipayNumber();
+        if (!TextUtils.isEmpty(alipayNumber)){
+            binding.alipayId.setText(alipayNumber);
+            binding.alipayNumEdit.setVisibility(View.GONE);
+        }
+    }
+
+    @Override
+    protected void loadData() {
         modules = new ArrayList<>();
         Module module1 = new Module();
         module1.setImageRes(R.drawable.india_chennai_highway);
@@ -66,6 +76,8 @@ public class MainActivity extends Activity implements AddModuleDialog.OnAddModul
         modules.add(module3);
         adapter.notifyDataSetChanged();
     }
+
+
 
     private AddModuleDialog addModuleDialog;
 
@@ -169,6 +181,26 @@ public class MainActivity extends Activity implements AddModuleDialog.OnAddModul
                 .duration(600)
                 .playOn(binding.slideLayout);
         binding.fab.setVisibility(View.VISIBLE);
+    }
+
+    public void bindAlipayNumber(View view) {
+        if (!TextUtils.isEmpty(SpUtil.getAlipayNumber())){
+            binding.alipayId.setVisibility(View.GONE);
+            binding.alipayNumEdit.setVisibility(View.VISIBLE);
+            return;
+        }
+
+        String alipayNumber = binding.alipayNumEdit.getText().toString();
+        if (TextUtils.isEmpty(alipayNumber)){
+            YoYo.with(Techniques.Shake)
+                    .duration(Commons.ANIMATION_DURATION)
+                    .playOn(binding.alipayNumEdit);
+        }else{
+            binding.alipayNumEdit.setVisibility(View.GONE);
+            binding.alipayId.setVisibility(View.VISIBLE);
+            binding.alipayNum.setText(alipayNumber);
+            SpUtil.putAlipayNumber(alipayNumber);
+        }
     }
 
     private class ModuleAdapter extends RecyclerView.Adapter<ModuleHolder> {
